@@ -1,4 +1,4 @@
-# Secret Kube
+# Secret Kube [![Build Status](https://travis-ci.org/troy0820/secretkube.svg?branch=master)](https://travis-ci.org/troy0820/secretkube)
 
 _Name is a work in progress_
 
