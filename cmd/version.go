@@ -5,17 +5,17 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func versionCmd() *cobra.Command {
-	return &cobra.Command{
-		Use:     "version",
-		Short:   "Prints the version of secretkube",
-		Aliases: []string{"Version"},
-		Run: func(cmd *cobra.Command, args []string) {
-			Version()
-		},
-	}
+var versionNumber = "0.0.1"
+
+var versionCmd = &cobra.Command{
+	Use:     "version",
+	Short:   "Prints the version of secretkube",
+	Aliases: []string{"Version"},
+	Run: func(cmd *cobra.Command, args []string) {
+		Version(versionNumber)
+	},
 }
 
-func Version() {
-	fmt.Println("SecretKube -- version 0.0.1")
+func Version(str string) {
+	fmt.Println("SecretKube -- version", str)
 }

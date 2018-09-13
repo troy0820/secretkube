@@ -17,7 +17,7 @@ var rootCmd = &cobra.Command{
 			cmd.Println(err.Error())
 		}
 		if fl {
-			Version()
+			Version(versionNumber)
 		} else {
 			cmd.Help()
 		}
@@ -25,10 +25,12 @@ var rootCmd = &cobra.Command{
 }
 
 var vers bool
+var config string
 
 func init() {
-	rootCmd.AddCommand(versionCmd())
-	rootCmd.AddCommand(createCmd())
+	createCmd.Flags().StringVarP(&config, "config", "c", "", "filepath of kubeconfig")
+	rootCmd.AddCommand(versionCmd)
+	rootCmd.AddCommand(createCmd)
 	rootCmd.Flags().BoolVarP(&vers, "version", "v", false, "version output")
 }
 
