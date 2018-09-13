@@ -12,12 +12,23 @@ var rootCmd = &cobra.Command{
 	Long: `Allows you to create Kubernetes secrets with json from key/value pairs
 		and place them in your cluster without creating yaml files`,
 	Run: func(cmd *cobra.Command, args []string) {
-		cmd.Println("This is a test command")
+		fl, err := cmd.Flags().GetBool("version")
+		if err != nil {
+			cmd.Println(err.Error())
+		}
+		if fl {
+			Version()
+		} else {
+			cmd.Help()
+		}
 	},
 }
 
+var vers bool
+
 func init() {
 	rootCmd.AddCommand(versionCmd())
+	rootCmd.Flags().BoolVarP(&vers, "version", "v", false, "version output")
 }
 
 func Execute() {
