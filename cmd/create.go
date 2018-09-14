@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"encoding/base64"
-	"fmt"
 	"github.com/spf13/cobra"
 )
 
@@ -17,14 +16,25 @@ var createCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fl, err := cmd.Flags().GetString("config")
 		if err != nil {
-			fmt.Println(err.Error())
+			cmd.Println(err.Error())
 		}
-		var str2 string
+		ns, err := cmd.Flags().GetString("namespace")
+		if err != nil {
+			cmd.Println(err.Error())
+		}
+
+		var str2, namespace string
+		if ns != "" {
+			namespace = "Hello"
+		} else {
+			namespace = ""
+		}
+
 		if fl != "" {
 			str2 = convertToBase64(fl)
 		} else {
 			str2 = convertToBase64("This is the default string")
 		}
-		fmt.Println("This is a string base64 encoded", str2)
+		cmd.Println("This is a string base64 encoded", str2, namespace)
 	},
 }

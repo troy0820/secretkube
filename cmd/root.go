@@ -25,10 +25,11 @@ var rootCmd = &cobra.Command{
 }
 
 var vers bool
-var config string
+var config, namespace string
 
 func init() {
 	createCmd.Flags().StringVarP(&config, "config", "c", "", "filepath of kubeconfig")
+	createCmd.Flags().StringVarP(&namespace, "namespace", "n", "", "namespace to put secret in")
 	rootCmd.AddCommand(versionCmd)
 	rootCmd.AddCommand(createCmd)
 	rootCmd.Flags().BoolVarP(&vers, "version", "v", false, "version output")
