@@ -17,7 +17,7 @@ var rootCmd = &cobra.Command{
 			cmd.Println(err.Error())
 		}
 		if fl {
-			Version(versionNumber)
+			cmd.Println(Version(versionNumber))
 		} else {
 			cmd.Help()
 		}
