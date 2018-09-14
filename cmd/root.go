@@ -10,7 +10,7 @@ var rootCmd = &cobra.Command{
 	Use:   "secretkube",
 	Short: "Create Kubernetes secrets with key/value pairs from json",
 	Long: `Create Kubernetes secrets with json from key/value pairs
-	and place them in your cluster without creating yaml files`,
+and place them in your cluster without creating yaml files`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fl, err := cmd.Flags().GetBool("version")
 		if err != nil {
@@ -25,13 +25,15 @@ var rootCmd = &cobra.Command{
 }
 
 var vers bool
-var config, namespace string
+var config, namespace, file string
 
 func init() {
 	createCmd.Flags().StringVarP(&config, "config", "c", "", "filepath of kubeconfig")
 	createCmd.Flags().StringVarP(&namespace, "namespace", "n", "", "namespace to put secret in")
+	outputCmd.Flags().StringVarP(&file, "file", "f", "", "file path to save secret")
 	rootCmd.AddCommand(versionCmd)
 	rootCmd.AddCommand(createCmd)
+	rootCmd.AddCommand(outputCmd)
 	rootCmd.Flags().BoolVarP(&vers, "version", "v", false, "version output")
 }
 
