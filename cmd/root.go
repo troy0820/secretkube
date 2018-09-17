@@ -25,12 +25,14 @@ and place them in your cluster without creating yaml files`,
 }
 
 var vers bool
-var config, namespace, file string
+var config, namespace, jsonFile, file, output string
 
 func init() {
 	createCmd.Flags().StringVarP(&config, "config", "c", "", "filepath of kubeconfig")
 	createCmd.Flags().StringVarP(&namespace, "namespace", "n", "", "namespace to put secret in")
-	outputCmd.Flags().StringVarP(&file, "file", "f", "", "file path to save secret")
+	createCmd.Flags().StringVarP(&jsonFile, "file", "f", "", "filepath of JSON file")
+	outputCmd.Flags().StringVarP(&file, "file", "f", "", "file path of JSON file")
+	outputCmd.Flags().StringVarP(&output, "output", "o", "", "output file to save secret")
 	rootCmd.AddCommand(versionCmd)
 	rootCmd.AddCommand(createCmd)
 	rootCmd.AddCommand(outputCmd)
