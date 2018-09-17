@@ -15,8 +15,16 @@ create.  This output can be saved to a file or printed to the screen`,
 		if err != nil {
 			cmd.Println(err.Error())
 		}
-		if fl != "" {
-			cmd.Println("Saving to: ", fl)
+		out, err := cmd.Flags().GetString("output")
+		if err != nil {
+			cmd.Println(err.Error())
+		}
+		ns, err := cmd.Flags().GetString("namespace")
+		if err != nil {
+			cmd.Println(err.Error())
+		}
+		if fl != "" && out != "" && ns != "" {
+			cmd.Printf("Saving %s secret to: %s in %s namespace", fl, out, ns)
 		} else {
 			cmd.Println("No file location chosen")
 			os.Exit(1)
