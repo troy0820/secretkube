@@ -10,9 +10,10 @@ func convertToBase64(str string) string {
 }
 
 var createCmd = &cobra.Command{
-	Use:   "create",
-	Short: "Creates secret for cluster",
-	Long:  `Creates a kubernetes secret for your cluster`,
+	Use:     "create",
+	Short:   "Creates secret for cluster",
+	Long:    `Creates a kubernetes secret for your cluster`,
+	Aliases: []string{"Create"},
 	Run: func(cmd *cobra.Command, args []string) {
 		fl, err := cmd.Flags().GetString("config")
 		if err != nil {
