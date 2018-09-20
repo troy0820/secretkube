@@ -13,6 +13,7 @@ var versionCmd = &cobra.Command{
 	},
 }
 
+//Version  command takes the string and shows the version
 func Version(str string) string {
 	return "SecretKube -- version " + str
 }

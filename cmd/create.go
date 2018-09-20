@@ -20,35 +20,41 @@ var createCmd = &cobra.Command{
 	Long:    `Creates a kubernetes secret for your cluster`,
 	Aliases: []string{"Create"},
 	Run: func(cmd *cobra.Command, args []string) {
+
+		var kubeconfig, str, namespace string
 		fl, err := cmd.Flags().GetString("config")
 		if err != nil {
 			cmd.Println(err.Error())
 		}
-		kubeconfig := os.Getenv("HOME") + "/.kube/config"
+		if fl != "" {
+			str = "Flag is set: " + convertToBase64(fl)
+			kubeconfig = fl
+			cmd.Println("Kubeconfig: ", kubeconfig)
+
+		} else {
+			str = "Flag is not set: default: " + convertToBase64("This is the default string")
+			kubeconfig = os.Getenv("HOME") + "/.kube/config"
+			cmd.Println("Kubeconfig: ", kubeconfig)
+		}
+
 		config, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
 		if err != nil {
 			cmd.Println(err.Error())
 		}
+
 		cmd.Println("Kubeconfig:", config)
+
 		ns, err := cmd.Flags().GetString("namespace")
 		if err != nil {
 			cmd.Println(err.Error())
 		}
 
-		var str2, namespace string
 		if ns != "" {
 			namespace = "Hello"
 		} else {
 			namespace = ""
 		}
 
-		if fl != "" {
-			str2 = convertToBase64(fl)
-		} else {
-			//default kubeconfig
-			//TODO: assign variable to ~/.kube/config
-			str2 = convertToBase64("This is the default string")
-		}
-		cmd.Println("This is a string base64 encoded", str2, namespace)
+		cmd.Println("This is a string base64 encoded", str, namespace)
 	},
 }

@@ -40,6 +40,7 @@ func init() {
 	rootCmd.Flags().BoolVarP(&vers, "version", "v", false, "version output")
 }
 
+//Execute command to execute root command that is esentially the whole program
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err.Error())
