@@ -31,6 +31,7 @@ func init() {
 	createCmd.Flags().StringVarP(&config, "config", "c", "", "filepath of kubeconfig")
 	createCmd.Flags().StringVarP(&namespace, "namespace", "n", "", "namespace to put secret in")
 	createCmd.Flags().StringVarP(&jsonFile, "file", "f", "", "filepath of JSON file")
+	createCmd.MarkFlagRequired("file")
 	outputCmd.Flags().StringVarP(&file, "file", "f", "", "file path of JSON file")
 	outputCmd.Flags().StringVarP(&output, "output", "o", "", "output file to save secret")
 	outputCmd.Flags().StringVarP(&ns, "namespace", "n", "", "namespace for secret")
