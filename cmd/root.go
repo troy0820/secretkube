@@ -34,6 +34,7 @@ func init() {
 	outputCmd.Flags().StringVarP(&file, "file", "f", "", "file path of JSON file")
 	outputCmd.Flags().StringVarP(&output, "output", "o", "", "output file to save secret")
 	outputCmd.Flags().StringVarP(&ns, "namespace", "n", "", "namespace for secret")
+	outputCmd.MarkFlagRequired("file")
 	rootCmd.AddCommand(versionCmd)
 	rootCmd.AddCommand(createCmd)
 	rootCmd.AddCommand(outputCmd)
