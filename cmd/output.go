@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	//"k8s.io/client-go/kubernetes/fake"
 	"os"
 )
 
@@ -15,6 +16,8 @@ create.  This output can be saved to a file or printed to the screen`,
 		if err != nil {
 			cmd.Println(err.Error())
 		}
+		//clientset := fake.NewSimpleClientset()
+		//cmd.Println("clientset", clientset)
 		out, err := cmd.Flags().GetString("output")
 		if err != nil {
 			cmd.Println(err.Error())
