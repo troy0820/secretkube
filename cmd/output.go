@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"k8s.io/client-go/kubernetes/fake"
+	"k8s.io/kubernetes/pkg/apis/core"
 	"os"
 )
 
@@ -26,7 +27,8 @@ create.  This output can be saved to a file or printed to the screen`,
 		}
 		clientset := fake.NewSimpleClientset()
 		cmd.Println("clientset", clientset)
-
+		sec := core.Secret{}
+		cmd.Println("secret", sec)
 		if fl != "" && out != "" && ns != "" {
 			cmd.Printf("Saving %s secret to: %s in %s namespace", convertToBase64(fl), out, ns)
 		} else {

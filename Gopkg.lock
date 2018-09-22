@@ -393,12 +393,13 @@
   revision = "f456898a08e4bbc5891694118f3819f324de12ff"
 
 [[projects]]
-  digest = "1:c9fcd90de79fc4f1f224109b5b4873d547be60fb43d71fccbcbb1bee65868db7"
+  digest = "1:b3e106182d33e3f55d4a4eb22819943c9ddbb529af7212680675a7df5b798d57"
   name = "k8s.io/apimachinery"
   packages = [
     "pkg/api/errors",
     "pkg/api/meta",
     "pkg/api/resource",
+    "pkg/apis/meta/internalversion",
     "pkg/apis/meta/v1",
     "pkg/apis/meta/v1/unstructured",
     "pkg/apis/meta/v1alpha1",
@@ -533,6 +534,14 @@
   pruneopts = "UT"
   revision = "e3762e86a74c878ffed47484592986685639c2cd"
 
+[[projects]]
+  digest = "1:9c68e8e14d6d4d9ab6ef12db7e70f4f5474a7ea30827a27485c3fa8d9f14bfbc"
+  name = "k8s.io/kubernetes"
+  packages = ["pkg/apis/core"]
+  pruneopts = "UT"
+  revision = "a4529464e4629c21224b3d52edfe0ea91b072862"
+  version = "v1.11.3"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
@@ -541,6 +550,7 @@
     "k8s.io/client-go/kubernetes/fake",
     "k8s.io/client-go/plugin/pkg/client/auth/gcp",
     "k8s.io/client-go/tools/clientcmd",
+    "k8s.io/kubernetes/pkg/apis/core",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
