@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes/fake"
 	"k8s.io/kubernetes/pkg/apis/core"
 	"os"
@@ -27,8 +28,18 @@ create.  This output can be saved to a file or printed to the screen`,
 		}
 		clientset := fake.NewSimpleClientset()
 		cmd.Println("clientset", clientset)
+		objMeta := metav1.ObjectMeta{
+			Name:      "fake-secret",
+			Namespace: "default",
+		}
+		objTypeMeta := metav1.TypeMeta{
+			Kind:       "Secret",
+			APIVersion: "v1",
+		}
 		sec := core.Secret{}
-		cmd.Println("secret", sec)
+		cmd.Printf("secret: %+v\n\n", sec)
+		cmd.Printf("meta: %+v\n\n", objMeta)
+		cmd.Printf("Type: %+v\n\n", objTypeMeta)
 		if fl != "" && out != "" && ns != "" {
 			cmd.Printf("Saving %s secret to: %s in %s namespace", convertToBase64(fl), out, ns)
 		} else {
