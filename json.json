@@ -1,0 +1,18 @@
+{
+    "_id": "5baa89936477269234f7a4be",
+    "index": 0,
+    "guid": "7c020d61-3bf4-46d5-915c-9dfb9be8c628",
+    "isActive": true,
+    "balance": "$3,820.72",
+    "picture": "http://placehold.it/32x32",
+    "age": 27,
+    "eyeColor": "blue",
+    "name": "Mason Riggs",
+    "gender": "male",
+    "company": "SUPPORTAL",
+    "email": "masonriggs@supportal.com",
+    "phone": "+1 (806) 484-2590",
+    "address": "158 Oak Street, Breinigsville, Alaska, 6912",
+    "about": "Amet veniam non et eu mollit ad incididunt. Anim id ullamco anim veniam esse ut velit. Magna sunt voluptate reprehenderit dolor veniam anim reprehenderit enim. Ipsum id dolore fugiat Lorem aute non Lorem excepteur. In sunt fugiat sunt velit est ex. Fugiat eiusmod enim ullamco quis aute ea. Ad ipsum dolor do eu fugiat Lorem amet.\r\n",
+    "registered": "2015-09-09T05:47:56 +04:00"
+  }
