@@ -18,6 +18,11 @@ create.  This output can be saved to a file or printed to the screen`,
 		if err != nil {
 			cmd.Println(err.Error())
 		}
+		//		f, err := os.Open(fl)
+		//		if err != nil {
+		//			cmd.Println("File doesn't exist")
+		//			os.Exit(1)
+		//		}
 		out, err := cmd.Flags().GetString("output")
 		if err != nil {
 			cmd.Println(err.Error())
