@@ -18,11 +18,12 @@ create.  This output can be saved to a file or printed to the screen`,
 		if err != nil {
 			cmd.Println(err.Error())
 		}
-		//		f, err := os.Open(fl)
-		//		if err != nil {
-		//			cmd.Println("File doesn't exist")
-		//			os.Exit(1)
-		//		}
+		m, err := makeMapfromJson(fl)
+		if err != nil {
+			cmd.Println("Error: No file exists", err)
+			os.Exit(1)
+		}
+		cmd.Println("map", m)
 		out, err := cmd.Flags().GetString("output")
 		if err != nil {
 			cmd.Println(err.Error())
