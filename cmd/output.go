@@ -20,7 +20,7 @@ create.  This output can be saved to a file or printed to the screen`,
 		}
 		m, err := makeMapfromJson(fl)
 		if err != nil {
-			cmd.Println("Error: No file exists", err)
+			cmd.Println(err.Error())
 			os.Exit(1)
 		}
 		cmd.Println("map", m)

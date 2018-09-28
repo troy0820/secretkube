@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"bufio"
-	"fmt"
+	"errors"
 	"os"
 	"strings"
 )
@@ -11,8 +11,7 @@ func makeMapfromJson(file string) (map[string]interface{}, error) {
 	m := map[string]interface{}{}
 	f, err := os.Open(file)
 	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(1)
+		return m, errors.New(err.Error())
 	}
 	defer f.Close()
 	scanner := bufio.NewScanner(f)
