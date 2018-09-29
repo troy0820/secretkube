@@ -8,6 +8,14 @@ import (
 	"os"
 )
 
+func turnMaptoBytes(m map[string]interface{}) map[string][]byte {
+	newMap := map[string][]byte{}
+	for k, v := range m {
+		newMap[k] = []byte(v.(string))
+	}
+	return newMap
+}
+
 var outputCmd = &cobra.Command{
 	Use:   "output",
 	Short: "Creates output of the secret",
@@ -42,7 +50,8 @@ create.  This output can be saved to a file or printed to the screen`,
 			Kind:       "Secret",
 			APIVersion: "v1",
 		}
-		sec := core.Secret{TypeMeta: objTypeMeta, ObjectMeta: objMeta}
+		bytemap := turnMaptoBytes(m)
+		sec := core.Secret{TypeMeta: objTypeMeta, ObjectMeta: objMeta, Data: bytemap}
 		cmd.Printf("secret: %+v\n\n", sec)
 		cmd.Printf("meta: %+v\n\n", objMeta)
 		cmd.Printf("Type: %+v\n\n", objTypeMeta)
