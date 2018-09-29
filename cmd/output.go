@@ -42,7 +42,7 @@ create.  This output can be saved to a file or printed to the screen`,
 			Kind:       "Secret",
 			APIVersion: "v1",
 		}
-		sec := core.Secret{}
+		sec := core.Secret{TypeMeta: objTypeMeta, ObjectMeta: objMeta}
 		cmd.Printf("secret: %+v\n\n", sec)
 		cmd.Printf("meta: %+v\n\n", objMeta)
 		cmd.Printf("Type: %+v\n\n", objTypeMeta)
