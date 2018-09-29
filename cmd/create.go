@@ -4,7 +4,7 @@ import (
 	"encoding/base64"
 	"github.com/spf13/cobra"
 	//	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	//	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/kubernetes"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 	"k8s.io/client-go/tools/clientcmd"
 	"os"
@@ -43,7 +43,8 @@ var createCmd = &cobra.Command{
 		}
 
 		cmd.Println("Kubeconfig:", config)
-
+		clientset := kubernetes.NewForConfigOrDie(config)
+		cmd.Println("Kubernetes clientset", clientset)
 		ns, err := cmd.Flags().GetString("namespace")
 		if err != nil {
 			cmd.Println(err.Error())
