@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"bufio"
+	"encoding/base64"
 	"errors"
 	"os"
 	"strings"
@@ -30,6 +31,14 @@ func turnMaptoBytes(m map[string]interface{}) map[string][]byte {
 	newMap := map[string][]byte{}
 	for k, v := range m {
 		newMap[k] = []byte(v.(string))
+	}
+	return newMap
+}
+
+func convertMapValuesToBase64(m map[string][]byte) map[string][]byte {
+	newMap := map[string][]byte{}
+	for k, v := range m {
+		newMap[k] = []byte(base64.StdEncoding.EncodeToString(v))
 	}
 	return newMap
 }

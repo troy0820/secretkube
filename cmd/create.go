@@ -23,9 +23,7 @@ var createCmd = &cobra.Command{
 
 		var kubeconfig, str, namespace string
 		fl, err := cmd.Flags().GetString("config")
-		if err != nil {
-			cmd.Println(err.Error())
-		}
+		printError(err, cmd, "Error:")
 		if fl != "" {
 			str = "Flag is set: " + convertToBase64(fl)
 			kubeconfig = fl
@@ -38,17 +36,12 @@ var createCmd = &cobra.Command{
 		}
 
 		config, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
-		if err != nil {
-			cmd.Println(err.Error())
-		}
-
+		printError(err, cmd, "Error:")
 		cmd.Println("Kubeconfig:", config)
 		clientset := kubernetes.NewForConfigOrDie(config)
 		cmd.Println("Kubernetes clientset", clientset)
 		ns, err := cmd.Flags().GetString("namespace")
-		if err != nil {
-			cmd.Println(err.Error())
-		}
+		printError(err, cmd, "Error:")
 
 		if ns != "" {
 			namespace = "Hello"
