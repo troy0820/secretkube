@@ -356,8 +356,7 @@
   version = "v2.2.1"
 
 [[projects]]
-  branch = "master"
-  digest = "1:d938bb87f0ff59fa564707b45fdc1c849c70bb4937dae8483219eacf21ddbdc6"
+  digest = "1:ed72a891abbac385714a6929856161591ccf6d0281de47756ac777563e944e14"
   name = "k8s.io/api"
   packages = [
     "admissionregistration/v1alpha1",
@@ -390,7 +389,8 @@
     "storage/v1beta1",
   ]
   pruneopts = "UT"
-  revision = "f456898a08e4bbc5891694118f3819f324de12ff"
+  revision = "af4bc157c3a209798fc897f6d4aaaaeb6c2e0d6a"
+  version = "kubernetes-1.9.0"
 
 [[projects]]
   digest = "1:b3e106182d33e3f55d4a4eb22819943c9ddbb529af7212680675a7df5b798d57"
@@ -547,6 +547,7 @@
   analyzer-version = 1
   input-imports = [
     "github.com/spf13/cobra",
+    "k8s.io/api/core/v1",
     "k8s.io/apimachinery/pkg/apis/meta/v1",
     "k8s.io/client-go/kubernetes",
     "k8s.io/client-go/kubernetes/fake",
