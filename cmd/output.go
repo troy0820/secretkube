@@ -8,12 +8,17 @@ import (
 	"os"
 )
 
-func turnMaptoBytes(m map[string]interface{}) map[string][]byte {
-	newMap := map[string][]byte{}
-	for k, v := range m {
-		newMap[k] = []byte(v.(string))
+func printError(err error, cmd *cobra.Command, msg string) {
+	if err != nil {
+		cmd.Println(msg, err.Error())
 	}
-	return newMap
+}
+
+func printErrorWithExit(err error, cmd *cobra.Command, msg string) {
+	if err != nil {
+		cmd.Println(msg, err.Error())
+		os.Exit(1)
+	}
 }
 
 var outputCmd = &cobra.Command{
@@ -23,25 +28,21 @@ var outputCmd = &cobra.Command{
 create.  This output can be saved to a file or printed to the screen`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fl, err := cmd.Flags().GetString("file")
-		if err != nil {
-			cmd.Println(err.Error())
-		}
+		printError(err, cmd, "Error:")
+
 		m, err := makeMapfromJson(fl)
-		if err != nil {
-			cmd.Println(err.Error())
-			os.Exit(1)
-		}
+		printErrorWithExit(err, cmd, "Error:")
 		cmd.Println("map", m)
+
 		out, err := cmd.Flags().GetString("output")
-		if err != nil {
-			cmd.Println(err.Error())
-		}
+		printError(err, cmd, "Error:")
+
 		ns, err := cmd.Flags().GetString("namespace")
-		if err != nil {
-			cmd.Println(err.Error())
-		}
+		printError(err, cmd, "Error:")
+
 		clientset := fake.NewSimpleClientset()
 		cmd.Println("clientset", clientset)
+
 		objMeta := metav1.ObjectMeta{
 			Name:      "fake-secret",
 			Namespace: "default",
@@ -50,6 +51,7 @@ create.  This output can be saved to a file or printed to the screen`,
 			Kind:       "Secret",
 			APIVersion: "v1",
 		}
+
 		bytemap := turnMaptoBytes(m)
 		sec := core.Secret{TypeMeta: objTypeMeta, ObjectMeta: objMeta, Data: bytemap}
 		cmd.Printf("secret: %+v\n\n", sec)

@@ -25,3 +25,11 @@ func makeMapfromJson(file string) (map[string]interface{}, error) {
 	}
 	return m, nil
 }
+
+func turnMaptoBytes(m map[string]interface{}) map[string][]byte {
+	newMap := map[string][]byte{}
+	for k, v := range m {
+		newMap[k] = []byte(v.(string))
+	}
+	return newMap
+}
