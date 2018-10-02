@@ -1,6 +1,9 @@
 package cmd
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestJsonFunction(t *testing.T) {
 	m, err := makeMapfromJson("../json.json")
@@ -16,4 +19,53 @@ func TestJsonFunction(t *testing.T) {
 		}
 	}
 
+}
+
+func TestMapToString(t *testing.T) {
+	m, err := makeMapfromJson("../json.json")
+
+	if err != nil {
+		t.Error("Error when executing function")
+	}
+
+	mm := turnMaptoString(m)
+
+	for _, v := range mm {
+		if reflect.TypeOf(v).Kind() == reflect.String {
+			continue
+		}
+	}
+}
+
+func TestMapToBytes(t *testing.T) {
+	m, err := makeMapfromJson("../json.json")
+
+	if err != nil {
+		t.Error("Error when executing function")
+	}
+
+	mm := turnMaptoBytes(m)
+
+	for _, v := range mm {
+		if reflect.TypeOf(v).Kind() == reflect.String {
+			continue
+		}
+	}
+}
+
+func TestConvertMapToBase64(t *testing.T) {
+	m, err := makeMapfromJson("../json.json")
+
+	if err != nil {
+		t.Error("Error when executing function")
+	}
+
+	mm := convertMapValuesToBase64(turnMaptoBytes(m))
+
+	for _, v := range mm {
+		if reflect.TypeOf(v).Kind() == reflect.Uint8 {
+			continue
+		}
+
+	}
 }

@@ -42,3 +42,11 @@ func convertMapValuesToBase64(m map[string][]byte) map[string][]byte {
 	}
 	return newMap
 }
+
+func turnMaptoString(m map[string]interface{}) map[string]string {
+	newMap := map[string]string{}
+	for k, v := range m {
+		newMap[k] = v.(string)
+	}
+	return newMap
+}
