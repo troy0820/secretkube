@@ -50,24 +50,21 @@ create.  This output can be saved to a file or printed to the screen`,
 		objTypeMeta := metav1.TypeMeta{
 			Kind:       "Secret",
 			APIVersion: "v1",
-		}
+		} //TODO: Take out ==== before release
 		cmd.Println("==============================================")
 		bytemap := convertMapValuesToBase64(turnMaptoBytes(m))
 		sec := core.Secret{TypeMeta: objTypeMeta, ObjectMeta: objMeta, Data: bytemap}
-		clientset.CoreV1().Secrets(ns).Create(&v1.Secret{
+		cmd.Println("sec:", sec)
+		secretclient := clientset.CoreV1().Secrets(ns)
+		//TODO: Add StringData map[string]string add function for this
+		secretclient.Create(&v1.Secret{
 			ObjectMeta: objMeta,
 			Data:       bytemap,
 		})
-		secrets, err := clientset.CoreV1().Secrets("").List(metav1.ListOptions{})
+		secret, err := secretclient.Get(objMeta.GetName(), metav1.GetOptions{})
 		printError(err, cmd, "Error:")
-		cmd.Println("These are the secrets", secrets)
+		cmd.Println("This is the secret ", secret)
 		cmd.Println("===============================================")
-		if len(secrets.Items) > 0 {
-			for _, secret := range secrets.Items {
-				cmd.Println("this is the for loop", secret.GetName(), secret.GetNamespace())
-			}
-		}
-		cmd.Printf("secret: %+v\n\n", sec)
 		cmd.Printf("meta: %+v\n\n", objMeta)
 		cmd.Printf("Type: %+v\n\n", objTypeMeta)
 		if fl != "" && out != "" && ns != "" {
