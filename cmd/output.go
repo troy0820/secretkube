@@ -22,6 +22,10 @@ func printErrorWithExit(err error, cmd *cobra.Command, msg string) {
 	}
 }
 
+func createOutputSecret(sec *v1.Secret) string {
+	return "This is the secret"
+}
+
 var outputCmd = &cobra.Command{
 	Use:   "output",
 	Short: "Creates output of the secret",
@@ -61,6 +65,7 @@ create.  This output can be saved to a file or printed to the screen`,
 			ObjectMeta: objMeta,
 			Data:       bytemap,
 			StringData: turnMaptoString(m),
+			Type:       "Opaque",
 		})
 		secret, err := secretclient.Get(objMeta.GetName(), metav1.GetOptions{})
 		printError(err, cmd, "Error:")
@@ -68,6 +73,7 @@ create.  This output can be saved to a file or printed to the screen`,
 		cmd.Println("===============================================")
 		cmd.Printf("meta: %+v\n\n", objMeta)
 		cmd.Printf("Type: %+v\n\n", objTypeMeta)
+		cmd.Println("function for secret:", createOutputSecret(secret))
 		if fl != "" && out != "" && ns != "" {
 			cmd.Printf("Saving %s secret to: %s in %s namespace", convertToBase64(fl), out, ns)
 		} else {
