@@ -60,6 +60,7 @@ create.  This output can be saved to a file or printed to the screen`,
 		secretclient.Create(&v1.Secret{
 			ObjectMeta: objMeta,
 			Data:       bytemap,
+			StringData: turnMaptoString(m),
 		})
 		secret, err := secretclient.Get(objMeta.GetName(), metav1.GetOptions{})
 		printError(err, cmd, "Error:")
