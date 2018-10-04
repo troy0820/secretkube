@@ -28,7 +28,7 @@ func createOutputSecret(sec *v1.Secret) string {
 	var a string
 	for k, v := range sec.StringData {
 		if unicode.IsDigit(rune(v[0])) || unicode.IsLetter(rune(v[0])) {
-			continue
+			a += fmt.Sprintf("  %s: %s\n", string(k[1:len(k)-1]), convertToBase64(string(v[0:len(v)-1])))
 		} else {
 			a += fmt.Sprintf("  %s: %s\n", string(k[1:len(k)-1]), convertToBase64(string(v[1:len(v)-2])))
 		}
