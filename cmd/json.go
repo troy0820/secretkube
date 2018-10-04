@@ -58,3 +58,14 @@ func decodeFromBase64(str string) string {
 	}
 	return string(str2)
 }
+
+func saveToFile(str, filename string) {
+	f, err := os.Create(filename)
+	if err != nil {
+		os.Exit(1)
+	}
+	defer f.Close()
+	w := bufio.NewWriter(f)
+	w.WriteString(str)
+	w.Flush()
+}

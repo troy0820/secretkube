@@ -54,6 +54,9 @@ create.  This output can be saved to a file or printed to the screen`,
 		fl, err := cmd.Flags().GetString("file")
 		printError(err, cmd, "Error:")
 
+		name, err := cmd.Flags().GetString("name")
+		printError(err, cmd, "Error:")
+
 		m, err := makeMapfromJson(fl)
 		printErrorWithExit(err, cmd, "Error:")
 		cmd.Println("map", m)
@@ -67,7 +70,7 @@ create.  This output can be saved to a file or printed to the screen`,
 		cmd.Println("clientset", clientset)
 
 		objMeta := metav1.ObjectMeta{
-			Name: "fake-secret",
+			Name: name,
 		}
 		objTypeMeta := metav1.TypeMeta{
 			Kind:       "Secret",
@@ -92,6 +95,7 @@ create.  This output can be saved to a file or printed to the screen`,
 		cmd.Printf("meta: %+v\n\n", objMeta)
 		cmd.Printf("Type: %+v\n\n", objTypeMeta)
 		cmd.Println("function for secret:", createOutputSecret(secret))
+		saveToFile(createOutputSecret(secret), out)
 		if fl != "" && out != "" && ns != "" {
 			cmd.Printf("Saving %s secret to: %s in %s namespace", convertToBase64(fl), out, ns)
 		} else {
