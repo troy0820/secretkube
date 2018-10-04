@@ -1,12 +1,14 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/spf13/cobra"
 	"k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes/fake"
 	"k8s.io/kubernetes/pkg/apis/core"
 	"os"
+	"unicode"
 )
 
 func printError(err error, cmd *cobra.Command, msg string) {
@@ -23,7 +25,24 @@ func printErrorWithExit(err error, cmd *cobra.Command, msg string) {
 }
 
 func createOutputSecret(sec *v1.Secret) string {
-	return "This is the secret"
+	var a string
+	for k, v := range sec.StringData {
+		if unicode.IsDigit(rune(v[0])) || unicode.IsLetter(rune(v[0])) {
+			continue
+		} else {
+			a += fmt.Sprintf("  %s: %s\n", string(k[1:len(k)-1]), string(v[1:len(v)-2]))
+		}
+	}
+	secret := `
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: ` + sec.GetName() + `
+  namespace: ` + sec.GetNamespace() + `
+data:    
+` + a
+	return secret
 }
 
 var outputCmd = &cobra.Command{
@@ -38,7 +57,6 @@ create.  This output can be saved to a file or printed to the screen`,
 		m, err := makeMapfromJson(fl)
 		printErrorWithExit(err, cmd, "Error:")
 		cmd.Println("map", m)
-
 		out, err := cmd.Flags().GetString("output")
 		printError(err, cmd, "Error:")
 

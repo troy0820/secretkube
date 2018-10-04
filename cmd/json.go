@@ -21,7 +21,7 @@ func makeMapfromJson(file string) (map[string]interface{}, error) {
 		str := strings.SplitN(scanner.Text(), ":", 2)
 		if len(str) > 1 {
 			str2 := strings.Trim(str[0], " ")
-			m[str2] = string(str[1])
+			m[str2] = string(strings.Trim(str[1], " "))
 		}
 	}
 	return m, nil
@@ -49,4 +49,12 @@ func turnMaptoString(m map[string]interface{}) map[string]string {
 		newMap[k] = v.(string)
 	}
 	return newMap
+}
+
+func decodeFromBase64(str string) string {
+	str2, err := base64.StdEncoding.DecodeString(str)
+	if err != nil {
+		os.Exit(1)
+	}
+	return string(str2)
 }
