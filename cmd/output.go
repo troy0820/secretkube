@@ -81,13 +81,13 @@ create.  This output can be saved to a file or printed to the screen`,
 		sec := core.Secret{TypeMeta: objTypeMeta, ObjectMeta: objMeta, Data: bytemap}
 		cmd.Println("sec:", sec)
 		secretclient := clientset.CoreV1().Secrets(ns)
-		//TODO: Add StringData map[string]string add function for this
 		secretclient.Create(&v1.Secret{
 			ObjectMeta: objMeta,
 			Data:       bytemap,
 			StringData: turnMaptoString(m),
 			Type:       "Opaque",
 		})
+		//TODO: Validate that secret created equals the secret made with createOutputSecret
 		secret, err := secretclient.Get(objMeta.GetName(), metav1.GetOptions{})
 		printError(err, cmd, "Error:")
 		cmd.Println("This is the secret ", secret)
