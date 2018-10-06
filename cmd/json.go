@@ -27,6 +27,12 @@ func makeMapfromJson(file string) (map[string]interface{}, error) {
 	return m, nil
 }
 
+/***
+TODO: Strip quotes from string like in function in output command
+When turning to bytes, you will be encoding that quote value and
+output of secret will be different than secret made i.e ImJsdWUiLA== equals
+"blue", instead of Ymx1ZQ== which equals blue
+***/
 func turnMaptoBytes(m map[string]interface{}) map[string][]byte {
 	newMap := map[string][]byte{}
 	for k, v := range m {
