@@ -6,6 +6,7 @@ import (
 	"errors"
 	"os"
 	"strings"
+	"unicode"
 )
 
 func makeMapfromJson(file string) (map[string]interface{}, error) {
@@ -27,16 +28,28 @@ func makeMapfromJson(file string) (map[string]interface{}, error) {
 	return m, nil
 }
 
-/***
-TODO: Strip quotes from string like in function in output command
-When turning to bytes, you will be encoding that quote value and
-output of secret will be different than secret made i.e ImJsdWUiLA== equals
-"blue", instead of Ymx1ZQ== which equals blue
-***/
+func stripQuotesforSecret(m map[string]string) map[string]string {
+	newMap := map[string]string{}
+	for k, v := range m {
+		if unicode.IsDigit(rune(v[0])) || unicode.IsLetter(rune(v[0])) {
+			newMap[k[1:len(k)-1]] = v[0 : len(v)-1]
+		} else {
+			newMap[k[1:len(k)-1]] = v[1 : len(v)-2]
+		}
+	}
+	return newMap
+}
+
 func turnMaptoBytes(m map[string]interface{}) map[string][]byte {
 	newMap := map[string][]byte{}
 	for k, v := range m {
-		newMap[k] = []byte(v.(string))
+		a := v.(string)
+		if unicode.IsDigit(rune(a[0])) || unicode.IsLetter(rune(a[0])) {
+			newMap[k[1:len(k)-1]] = []byte(a[0 : len(a)-1])
+		} else {
+			newMap[k[1:len(k)-1]] = []byte(a[1 : len(a)-2])
+		}
+
 	}
 	return newMap
 }

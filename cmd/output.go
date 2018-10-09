@@ -96,6 +96,8 @@ create.  This output can be saved to a file or printed to the screen`,
 		cmd.Printf("Type: %+v\n\n", objTypeMeta)
 		cmd.Println("function for secret:", createOutputSecret(secret))
 		saveToFile(createOutputSecret(secret), out)
+		printsecret := stripQuotesforSecret(secret.StringData)
+		cmd.Println("Test to see if this function works", printsecret)
 		if fl != "" && out != "" && ns != "" {
 			cmd.Printf("Saving %s secret to: %s in %s namespace", convertToBase64(fl), out, ns)
 		} else {
