@@ -6,7 +6,6 @@ import (
 	"k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes/fake"
-	"k8s.io/kubernetes/pkg/apis/core"
 	"os"
 	"unicode"
 )
@@ -59,7 +58,7 @@ create.  This output can be saved to a file or printed to the screen`,
 
 		m, err := makeMapfromJson(fl)
 		printErrorWithExit(err, cmd, "Error:")
-		cmd.Println("map", m)
+
 		out, err := cmd.Flags().GetString("output")
 		printError(err, cmd, "Error:")
 
@@ -67,7 +66,6 @@ create.  This output can be saved to a file or printed to the screen`,
 		printError(err, cmd, "Error:")
 
 		clientset := fake.NewSimpleClientset()
-		cmd.Println("clientset", clientset)
 
 		objMeta := metav1.ObjectMeta{
 			Name: name,
@@ -75,29 +73,24 @@ create.  This output can be saved to a file or printed to the screen`,
 		objTypeMeta := metav1.TypeMeta{
 			Kind:       "Secret",
 			APIVersion: "v1",
-		} //TODO: Take out ==== before release
-		cmd.Println("==============================================")
+		}
+
 		bytemap := convertMapValuesToBase64(turnMaptoBytes(m))
-		sec := core.Secret{TypeMeta: objTypeMeta, ObjectMeta: objMeta, Data: bytemap}
-		cmd.Println("sec:", sec)
+
 		secretclient := clientset.CoreV1().Secrets(ns)
 		secretclient.Create(&v1.Secret{
 			ObjectMeta: objMeta,
+			TypeMeta:   objTypeMeta,
 			Data:       bytemap,
 			StringData: turnMaptoString(m),
 			Type:       "Opaque",
 		})
-		//TODO: Validate that secret created equals the secret made with createOutputSecret
+
 		secret, err := secretclient.Get(objMeta.GetName(), metav1.GetOptions{})
 		printError(err, cmd, "Error:")
-		cmd.Println("This is the secret ", secret)
-		cmd.Println("===============================================")
-		cmd.Printf("meta: %+v\n\n", objMeta)
-		cmd.Printf("Type: %+v\n\n", objTypeMeta)
-		cmd.Println("function for secret:", createOutputSecret(secret))
+
 		saveToFile(createOutputSecret(secret), out)
-		printsecret := stripQuotesforSecret(secret.StringData)
-		cmd.Println("Test to see if this function works", printsecret)
+		cmd.Printf("Secret saved to %s file \n", out)
 		if fl != "" && out != "" && ns != "" {
 			cmd.Printf("Saving %s secret to: %s in %s namespace", convertToBase64(fl), out, ns)
 		} else {
