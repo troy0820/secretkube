@@ -3,6 +3,7 @@ package cmd
 import (
 	"reflect"
 	"testing"
+	"unicode"
 )
 
 func TestJsonFunction(t *testing.T) {
@@ -67,5 +68,21 @@ func TestConvertMapToBase64(t *testing.T) {
 			continue
 		}
 
+	}
+}
+
+func TestStripQuotes(t *testing.T) {
+	m, err := makeMapfromJson("../json.json")
+
+	if err != nil {
+		t.Error("Error executing function")
+	}
+	newMap := stripQuotesforSecret(turnMaptoString(m))
+	for _, v := range newMap {
+		if unicode.IsDigit(rune(v[0])) || unicode.IsLetter(rune(v[0])) || unicode.IsSymbol(rune(v[0])) {
+			continue
+		} else {
+			t.Error("Error: Quotes still remain in map", v)
+		}
 	}
 }
