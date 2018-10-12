@@ -48,8 +48,8 @@ func TestMapToBytes(t *testing.T) {
 	mm := turnMaptoBytes(m)
 
 	for _, v := range mm {
-		if reflect.TypeOf(v).Kind() == reflect.String {
-			continue
+		if reflect.TypeOf(v[0]).Kind() != reflect.Uint8 {
+			t.Errorf("Error: Value not a byte slice but it's a  %T", v)
 		}
 	}
 }
@@ -64,8 +64,8 @@ func TestConvertMapToBase64(t *testing.T) {
 	mm := convertMapValuesToBase64(turnMaptoBytes(m))
 
 	for _, v := range mm {
-		if reflect.TypeOf(v).Kind() == reflect.Uint8 {
-			continue
+		if reflect.TypeOf(v[0]).Kind() != reflect.Uint8 {
+			t.Errorf("Error: Value is not a byte slice but it's a %T", v)
 		}
 
 	}
