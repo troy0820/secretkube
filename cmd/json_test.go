@@ -32,8 +32,8 @@ func TestMapToString(t *testing.T) {
 	mm := turnMaptoString(m)
 
 	for _, v := range mm {
-		if reflect.TypeOf(v).Kind() == reflect.String {
-			continue
+		if reflect.TypeOf(v).Kind() != reflect.String {
+			t.Errorf("Error: Value of map is not a string but it's a %T", v)
 		}
 	}
 }
