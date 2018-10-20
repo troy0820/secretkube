@@ -62,8 +62,13 @@ create.  This output can be saved to a file or printed to the screen`,
 		out, err := cmd.Flags().GetString("output")
 		printError(err, cmd, "Error:")
 
-		ns, err := cmd.Flags().GetString("namespace")
-		printError(err, cmd, "Error:")
+		var ns string
+		if cmd.Flags().Changed("namespace") {
+			ns, err = cmd.Flags().GetString("namespace")
+			printError(err, cmd, "Error:")
+		} else {
+			ns = "default"
+		}
 
 		clientset := fake.NewSimpleClientset()
 
