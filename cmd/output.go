@@ -96,6 +96,7 @@ create.  This output can be saved to a file or printed to the screen`,
 
 		saveToFile(createOutputSecret(secret), out)
 		cmd.Printf("Secret saved to %s file \n", out)
+		cmd.Println("\nSecret: \n", createOutputSecret(secret))
 		if fl != "" && out != "" && ns != "" && name != "" {
 			cmd.Printf("Saving %s secret to: %s in %s namespace", convertToBase64(fl), out, ns)
 		} else {
