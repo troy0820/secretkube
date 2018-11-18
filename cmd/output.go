@@ -10,6 +10,11 @@ import (
 	"unicode"
 )
 
+type SecretMetaData struct {
+	metav1.ObjectMeta
+	metav1.TypeMeta
+}
+
 func printError(err error, cmd *cobra.Command, msg string) {
 	if err != nil {
 		cmd.Println(msg, err.Error())
@@ -71,29 +76,29 @@ create.  This output can be saved to a file or printed to the screen`,
 		}
 
 		clientset := fake.NewSimpleClientset()
-
-		objMeta := metav1.ObjectMeta{
-			Name: name,
-		}
-		objTypeMeta := metav1.TypeMeta{
-			Kind:       "Secret",
-			APIVersion: "v1",
+		secMeta := SecretMetaData{
+			metav1.ObjectMeta{
+				Name: name,
+			},
+			metav1.TypeMeta{
+				Kind:       "Secret",
+				APIVersion: "v1",
+			},
 		}
 
 		bytemap := convertMapValuesToBase64(turnMaptoBytes(m))
 
 		secretclient := clientset.CoreV1().Secrets(ns)
 		secretclient.Create(&v1.Secret{
-			ObjectMeta: objMeta,
-			TypeMeta:   objTypeMeta,
+			ObjectMeta: secMeta.ObjectMeta,
+			TypeMeta:   secMeta.TypeMeta,
 			Data:       bytemap,
 			StringData: turnMaptoString(m),
 			Type:       "Opaque",
 		})
 
-		secret, err := secretclient.Get(objMeta.GetName(), metav1.GetOptions{})
+		secret, err := secretclient.Get(secMeta.GetName(), metav1.GetOptions{})
 		printError(err, cmd, "Error:")
-
 		saveToFile(createOutputSecret(secret), out)
 		cmd.Printf("Secret saved to %s file \n", out)
 		cmd.Println("\nSecret: \n", createOutputSecret(secret))
