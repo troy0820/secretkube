@@ -1,13 +1,14 @@
 SHELL:=/bin/bash
 
-.PHONY: test
+all: secret
+
 test: secret
 	go test ./... -v
 
-.PHONY: secret
 secret:
 	go build -o secret
 
 clean:
-	rm -rf secret*
+	rm -rf secret* output*
 
+.PHONY: all test secret clean
