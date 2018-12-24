@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	//"github.com/fatih/color"
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -102,7 +102,9 @@ create.  This output can be saved to a file or printed to the screen`,
 		printError(err, cmd, "Error:")
 		saveToFile(createOutputSecret(secret), out)
 		cmd.Printf("Secret saved to %s file \n", out)
+		color.Set(color.FgGreen)
 		cmd.Println("\nSecret: \n", createOutputSecret(secret))
+		color.Unset()
 		if fl != "" && out != "" && ns != "" && name != "" {
 			cmd.Printf("Saving %s secret to: %s in %s namespace", convertToBase64(fl), out, ns)
 		} else {
