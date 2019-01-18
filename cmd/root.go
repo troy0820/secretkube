@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
+	"github.com/troy0820/secretkube/version"
 	"os"
 )
 
@@ -17,7 +18,7 @@ and place them in your cluster without creating yaml files`,
 			cmd.Println(err.Error())
 		}
 		if fl {
-			cmd.Println(Version(versionNumber))
+			cmd.Println(Version(version.Version))
 		} else {
 			cmd.Help()
 		}
