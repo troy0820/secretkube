@@ -1,16 +1,18 @@
 SHELL:=/bin/bash
 
+VERSION := $(shell cat VERSION.txt)
+
 all: secret
 
 test: secret
 	go test ./... -v
 
 secret-local:
-	go build -mod=vendor -ldflags "-X github.com/troy0820/secretkube/version.Version=0.0.1" -o secret
+	go build -mod=vendor -ldflags "-X github.com/troy0820/secretkube/version.Version=$(VERSION)" -o secret
 
 
 secret:
-	go build -ldflags "-X github.com/troy0820/secretkube/version.Version=0.0.1" -o secret
+	go build -ldflags "-X github.com/troy0820/secretkube/version.Version=$(VERSION)" -o secret
 
 clean:
 	rm -rf secret* output*
