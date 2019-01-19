@@ -1,4 +1,6 @@
-# Secret Kube [![Build Status](https://travis-ci.org/troy0820/secretkube.svg?branch=master)](https://travis-ci.org/troy0820/secretkube)
+# Secret Kube 
+[![Travis CI](https://img.shields.io/travis/troy0820/secretkube.svg?style=for-the-badge)](https://travis-ci.org/troy0820/secretkube)
+![](https://img.shields.io/github/issues/troy0820/secretkube.svg?style=for-the-badge)
 
 _Name is a work in progress_
 ## Table of Contents
