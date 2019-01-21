@@ -11,6 +11,7 @@ import (
 	"unicode"
 )
 
+//TODO: Create function which returns *v1.Secret and add necessary fields within the function
 type SecretMetaData struct {
 	metav1.ObjectMeta
 	metav1.TypeMeta
