@@ -45,7 +45,7 @@ data:
 	return secret
 }
 
-func createSecret(name string, m map[string]interface{}) (*v1.Secret, error) {
+func createSecret(name string, stringdata map[string]string, data map[string][]byte) (*v1.Secret, error) {
 	return &v1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: name,
@@ -54,8 +54,8 @@ func createSecret(name string, m map[string]interface{}) (*v1.Secret, error) {
 			Kind:       "Secret",
 			APIVersion: "v1",
 		},
-		Data:       convertMapValuesToBase64(turnMaptoBytes(m)),
-		StringData: turnMaptoString(m),
+		Data:       data,
+		StringData: stringdata,
 		Type:       "Opaque",
 	}, nil
 }
@@ -87,9 +87,10 @@ create.  This output can be saved to a file or printed to the screen`,
 		}
 
 		clientset := fake.NewSimpleClientset()
-
+		stringdata := turnMaptoString(m)
+		bytemap := convertMapValuesToBase64(turnMaptoBytes(m))
 		secretclient := clientset.CoreV1().Secrets(ns)
-		outputSecret, err := createSecret(name, m)
+		outputSecret, err := createSecret(name, stringdata, bytemap)
 		printError(err, cmd, "Error:")
 		secretclient.Create(outputSecret)
 
