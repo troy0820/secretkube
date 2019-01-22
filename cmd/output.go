@@ -88,7 +88,8 @@ create.  This output can be saved to a file or printed to the screen`,
 
 		clientset := fake.NewSimpleClientset()
 		stringdata := turnMaptoString(m)
-		bytemap := convertMapValuesToBase64(turnMaptoBytes(m))
+		bytemap := turnMaptoBytes(m)
+		convertMapValuesToBase64(bytemap)
 		secretclient := clientset.CoreV1().Secrets(ns)
 		outputSecret, err := createSecret(name, stringdata, bytemap)
 		printError(err, cmd, "Error:")

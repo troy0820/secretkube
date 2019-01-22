@@ -54,13 +54,11 @@ func turnMaptoBytes(m map[string]interface{}) map[string][]byte {
 	return newMap
 }
 
-//TODO: Make function accept pointer to reduce the saving of variables
-func convertMapValuesToBase64(m map[string][]byte) map[string][]byte {
-	newMap := map[string][]byte{}
+func convertMapValuesToBase64(m map[string][]byte) {
 	for k, v := range m {
-		newMap[k] = []byte(base64.StdEncoding.EncodeToString(v))
+		m[k] = []byte(base64.StdEncoding.EncodeToString(v))
 	}
-	return newMap
+
 }
 
 func turnMaptoString(m map[string]interface{}) map[string]string {
