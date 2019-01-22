@@ -61,7 +61,8 @@ func TestConvertMapToBase64(t *testing.T) {
 		t.Error("Error when executing function")
 	}
 
-	mm := convertMapValuesToBase64(turnMaptoBytes(m))
+	mm := turnMaptoBytes(m)
+	convertMapValuesToBase64(mm)
 
 	for _, v := range mm {
 		if reflect.TypeOf(v[0]).Kind() != reflect.Uint8 {
