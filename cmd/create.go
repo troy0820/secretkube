@@ -14,6 +14,9 @@ func convertToBase64(str string) string {
 	return base64.StdEncoding.EncodeToString([]byte(str))
 }
 
+//TODO: use createSecret with input from file to create secret
+//TODO: use cmd.Flags().Changed('string') to gather flags for create command
+
 var createCmd = &cobra.Command{
 	Use:     "create",
 	Short:   "Creates secret for cluster",
