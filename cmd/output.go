@@ -12,14 +12,16 @@ import (
 )
 
 func printError(err error, cmd *cobra.Command, msg string) {
+	red := color.New(color.FgRed).SprintFunc()
 	if err != nil {
-		cmd.Println(msg, err.Error())
+		cmd.Println(red(msg), red(err.Error()))
 	}
 }
 
 func printErrorWithExit(err error, cmd *cobra.Command, msg string) {
+	red := color.New(color.FgRed).SprintFunc()
 	if err != nil {
-		cmd.Println(msg, err.Error())
+		cmd.Println(red(msg), red(err.Error()))
 		os.Exit(1)
 	}
 }
