@@ -105,9 +105,13 @@ create.  This output can be saved to a file or printed to the screen`,
 		cmd.Println("\nSecret: \n", createOutputSecret(secret))
 		color.Unset()
 		if fl != "" && out != "" && ns != "" && name != "" {
+			color.Set(color.FgGreen)
 			cmd.Printf("Saving %s secret to: %s in %s namespace", convertToBase64(fl), out, ns)
+			color.Unset()
 		} else {
+			color.Set(color.FgRed)
 			cmd.Println("No file location chosen")
+			color.Unset()
 			os.Exit(1)
 		}
 	},
