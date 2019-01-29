@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"github.com/spf13/cobra"
 	//	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"github.com/fatih/color"
 	"k8s.io/client-go/kubernetes"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 	"k8s.io/client-go/tools/clientcmd"
@@ -16,6 +17,8 @@ func convertToBase64(str string) string {
 
 //TODO: use createSecret with input from file to create secret
 //TODO: use cmd.Flags().Changed('string') to gather flags for create command
+var red = color.New(color.FgRed).SprintFunc()
+var green = color.New(color.FgGreen).SprintFunc()
 
 var createCmd = &cobra.Command{
 	Use:     "create",
@@ -25,27 +28,28 @@ var createCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		var kubeconfig, str, namespace string
-		fl, err := cmd.Flags().GetString("config")
-		printError(err, cmd, "Error:")
-		if fl != "" {
-			str = "Flag is set: " + convertToBase64(fl)
-			kubeconfig = fl
-			cmd.Println("Kubeconfig: ", kubeconfig)
-
-		} else {
-			str = "Flag is not set: default: " + convertToBase64("This is the default string")
-			kubeconfig = os.Getenv("HOME") + "/.kube/config"
-			cmd.Println("Kubeconfig: ", kubeconfig)
+		kubeconfig = os.Getenv("HOME") + "/.kube/config"
+		if cmd.Flags().Changed("config") {
+			kubeconfig, _ = cmd.Flags().GetString("config")
 		}
+		cmd.Println(green("Using Kubeconfig: ", green(kubeconfig)))
 
 		config, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
-		printError(err, cmd, "Error:")
+		printErrorWithExit(err, cmd, "Error:")
 		cmd.Println("Kubeconfig:", config)
 		clientset := kubernetes.NewForConfigOrDie(config)
 		cmd.Println("Kubernetes clientset", clientset)
 		ns, err := cmd.Flags().GetString("namespace")
 		printError(err, cmd, "Error:")
-
+		/* TODO:// Take json file and use it to create secret to pass into client
+		m, err := makeMapfromJson(fl)
+		printErrorWithExit(err, cmd, "Error:")
+		stringdata := turnMaptoString(m)
+		bytemap := turnMaptoBytes(m)
+		convertMapValuesToBase64(bytemap)
+		sec, err := createSecret(name, stringdata, bytemap)
+		printError(err, cmd, "Error:")
+		*/
 		if ns != "" {
 			namespace = "Hello"
 		} else {
