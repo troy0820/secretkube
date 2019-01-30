@@ -33,22 +33,26 @@ var createCmd = &cobra.Command{
 			kubeconfig, _ = cmd.Flags().GetString("config")
 		}
 		cmd.Println(green("Using Kubeconfig: ", green(kubeconfig)))
-
+		ns = "default"
+		if cmd.Flags().Changed("namespace") {
+			ns, _ = cmd.Flags().GetString("namespace")
+		}
 		config, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
 		printErrorWithExit(err, cmd, "Error:")
 		cmd.Println("Kubeconfig:", config)
 		clientset := kubernetes.NewForConfigOrDie(config)
+		//		secretclient := clientset.CoreV1().Secrets(ns)
 		cmd.Println("Kubernetes clientset", clientset)
-		ns, err := cmd.Flags().GetString("namespace")
 		printError(err, cmd, "Error:")
-		/* TODO:// Take json file and use it to create secret to pass into client
-		m, err := makeMapfromJson(fl)
-		printErrorWithExit(err, cmd, "Error:")
-		stringdata := turnMaptoString(m)
-		bytemap := turnMaptoBytes(m)
-		convertMapValuesToBase64(bytemap)
-		sec, err := createSecret(name, stringdata, bytemap)
-		printError(err, cmd, "Error:")
+		// TODO:// Take json file and use it to create secret to pass into client
+		/*	m, err := makeMapfromJson(fl)
+			printErrorWithExit(err, cmd, "Error:")
+			stringdata := turnMaptoString(m)
+			bytemap := turnMaptoBytes(m)
+			convertMapValuesToBase64(bytemap)
+			sec, err := createSecret(name, stringdata, bytemap)
+			printError(err, cmd, "Error:")
+			secretclient.Create(sec)
 		*/
 		if ns != "" {
 			namespace = "Hello"

@@ -87,7 +87,7 @@ create.  This output can be saved to a file or printed to the screen`,
 		} else {
 			ns = "default"
 		}
-
+		//TODO: Write test to check return value from secret matches output secret function
 		clientset := fake.NewSimpleClientset()
 		stringdata := turnMaptoString(m)
 		bytemap := turnMaptoBytes(m)
@@ -95,9 +95,11 @@ create.  This output can be saved to a file or printed to the screen`,
 		secretclient := clientset.CoreV1().Secrets(ns)
 		outputSecret, err := createSecret(name, stringdata, bytemap)
 		printError(err, cmd, "Error:")
-		secretclient.Create(outputSecret)
+		something, err := secretclient.Create(outputSecret)
+		printError(err, cmd, "Secret:")
+		cmd.Println("secret", something)
 
-		secret, err := secretclient.Get(outputSecret.GetName(), metav1.GetOptions{})
+		secret, err := secretclient.Get(something.GetName(), metav1.GetOptions{})
 		printError(err, cmd, "Error:")
 		saveToFile(createOutputSecret(secret), out)
 		cmd.Printf("Secret saved to %s file \n", out)
