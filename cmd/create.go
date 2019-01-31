@@ -27,7 +27,7 @@ var createCmd = &cobra.Command{
 	Aliases: []string{"Create"},
 	Run: func(cmd *cobra.Command, args []string) {
 
-		var kubeconfig, str, namespace string
+		var kubeconfig, ns string
 		kubeconfig = os.Getenv("HOME") + "/.kube/config"
 		if cmd.Flags().Changed("config") {
 			kubeconfig, _ = cmd.Flags().GetString("config")
@@ -37,13 +37,15 @@ var createCmd = &cobra.Command{
 		if cmd.Flags().Changed("namespace") {
 			ns, _ = cmd.Flags().GetString("namespace")
 		}
+		file, _ := cmd.Flags().GetString("file")
 		config, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
 		printErrorWithExit(err, cmd, "Error:")
-		cmd.Println("Kubeconfig:", config)
+		cmd.Println(green("Kubeconfig:"), green(config))
 		clientset := kubernetes.NewForConfigOrDie(config)
 		//		secretclient := clientset.CoreV1().Secrets(ns)
-		cmd.Println("Kubernetes clientset", clientset)
+		cmd.Println(green("Kubernetes clientset"), red(clientset))
 		printError(err, cmd, "Error:")
+
 		// TODO:// Take json file and use it to create secret to pass into client
 		/*	m, err := makeMapfromJson(fl)
 			printErrorWithExit(err, cmd, "Error:")
@@ -54,12 +56,7 @@ var createCmd = &cobra.Command{
 			printError(err, cmd, "Error:")
 			secretclient.Create(sec)
 		*/
-		if ns != "" {
-			namespace = "Hello"
-		} else {
-			namespace = ""
-		}
 
-		cmd.Println("This is a string base64 encoded", str, namespace)
+		cmd.Println(green("This is a string base64 encoded"), red(file), red(ns), config)
 	},
 }
