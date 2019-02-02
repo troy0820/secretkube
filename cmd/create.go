@@ -16,7 +16,6 @@ func convertToBase64(str string) string {
 }
 
 //TODO: use createSecret with input from file to create secret
-//TODO: use cmd.Flags().Changed('string') to gather flags for create command
 var red = color.New(color.FgRed).SprintFunc()
 var green = color.New(color.FgGreen).SprintFunc()
 
@@ -32,7 +31,6 @@ var createCmd = &cobra.Command{
 		if cmd.Flags().Changed("config") {
 			kubeconfig, _ = cmd.Flags().GetString("config")
 		}
-		cmd.Println(green("Using Kubeconfig: ", green(kubeconfig)))
 		ns = "default"
 		if cmd.Flags().Changed("namespace") {
 			ns, _ = cmd.Flags().GetString("namespace")
