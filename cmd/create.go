@@ -29,13 +29,18 @@ var createCmd = &cobra.Command{
 		var kubeconfig, ns string
 		kubeconfig = os.Getenv("HOME") + "/.kube/config"
 		if cmd.Flags().Changed("config") {
-			kubeconfig, _ = cmd.Flags().GetString("config")
+			var err error
+			kubeconfig, err = cmd.Flags().GetString("config")
+			printError(err, cmd, "Error:")
 		}
 		ns = "default"
 		if cmd.Flags().Changed("namespace") {
-			ns, _ = cmd.Flags().GetString("namespace")
+			var err error
+			ns, err = cmd.Flags().GetString("namespace")
+			printError(err, cmd, "Error:")
 		}
-		file, _ := cmd.Flags().GetString("file")
+		file, err := cmd.Flags().GetString("file")
+		printError(err, cmd, "Error:")
 		config, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
 		printErrorWithExit(err, cmd, "Error:")
 		cmd.Println(green("Kubeconfig:"), green(config))
