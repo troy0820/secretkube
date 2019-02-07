@@ -8,7 +8,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes/fake"
 	"os"
-	"unicode"
+	"strings"
 )
 
 func printError(err error, cmd *cobra.Command, msg string) {
@@ -29,10 +29,14 @@ func printErrorWithExit(err error, cmd *cobra.Command, msg string) {
 func createOutputSecret(sec *v1.Secret) string {
 	var a string
 	for k, v := range sec.StringData {
-		if unicode.IsDigit(rune(v[0])) || unicode.IsLetter(rune(v[0])) {
-			a += fmt.Sprintf("  %s: %s\n", string(k[1:len(k)-1]), convertToBase64(string(v[0:len(v)-1])))
-		} else {
+		if strings.ContainsAny(v, ",") && strings.ContainsAny(v, "\"") {
 			a += fmt.Sprintf("  %s: %s\n", string(k[1:len(k)-1]), convertToBase64(string(v[1:len(v)-2])))
+
+		} else if strings.ContainsAny(v, "\"") {
+			a += fmt.Sprintf("  %s: %s\n", string(k[1:len(k)-1]), convertToBase64(string(v[1:len(v)-1])))
+
+		} else if strings.ContainsAny(v, ",") {
+			a += fmt.Sprintf("  %s: %s\n", string(k[1:len(k)-1]), convertToBase64(string(v[0:len(v)-1])))
 		}
 	}
 	secret := `
@@ -91,7 +95,7 @@ create.  This output can be saved to a file or printed to the screen`,
 		clientset := fake.NewSimpleClientset()
 		stringdata := turnMaptoString(m)
 		bytemap := turnMaptoBytes(m)
-		convertMapValuesToBase64(bytemap)
+		bytemap = convertMapValuesToBase64(bytemap)
 		secretclient := clientset.CoreV1().Secrets(ns)
 		outputSecret, err := createSecret(name, stringdata, bytemap)
 		printError(err, cmd, "Error:")

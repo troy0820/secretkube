@@ -44,20 +44,24 @@ func turnMaptoBytes(m map[string]interface{}) map[string][]byte {
 	newMap := map[string][]byte{}
 	for k, v := range m {
 		a := v.(string)
-		if unicode.IsDigit(rune(a[0])) || unicode.IsLetter(rune(a[0])) {
-			newMap[k[1:len(k)-1]] = []byte(a[0 : len(a)-1])
-		} else {
+		if strings.ContainsAny(a, ",") && strings.ContainsAny(a, "\"") {
 			newMap[k[1:len(k)-1]] = []byte(a[1 : len(a)-2])
+		} else if strings.ContainsAny(a, "\"") {
+			newMap[k[1:len(k)-1]] = []byte(a[1 : len(a)-1])
+		} else if strings.ContainsAny(a, ",") {
+			newMap[k[1:len(k)-1]] = []byte(a[0 : len(a)-1])
 		}
 
 	}
 	return newMap
 }
 
-func convertMapValuesToBase64(m map[string][]byte) {
+func convertMapValuesToBase64(m map[string][]byte) map[string][]byte {
+	newMap := map[string][]byte{}
 	for k, v := range m {
-		m[k] = []byte(base64.StdEncoding.EncodeToString(v))
+		newMap[k] = []byte(base64.StdEncoding.EncodeToString(v))
 	}
+	return newMap
 
 }
 
