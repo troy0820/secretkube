@@ -2,9 +2,10 @@ package cmd
 
 import (
 	"encoding/base64"
-	"github.com/spf13/cobra"
-	//	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"github.com/fatih/color"
+	"github.com/spf13/cobra"
+	"k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 	"k8s.io/client-go/tools/clientcmd"
@@ -27,6 +28,8 @@ var createCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		var kubeconfig, ns string
+		name, err := cmd.Flags().GetString("name")
+		printError(err, cmd, "Error: ")
 		kubeconfig = os.Getenv("HOME") + "/.kube/config"
 		if cmd.Flags().Changed("config") {
 			var err error
@@ -43,23 +46,27 @@ var createCmd = &cobra.Command{
 		printError(err, cmd, "Error:")
 		config, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
 		printErrorWithExit(err, cmd, "Error:")
-		cmd.Println(green("Kubeconfig:"), green(config))
 		clientset := kubernetes.NewForConfigOrDie(config)
-		//		secretclient := clientset.CoreV1().Secrets(ns)
-		cmd.Println(green("Kubernetes clientset"), red(clientset))
-		printError(err, cmd, "Error:")
+		secretclient := clientset.CoreV1().Secrets(ns)
 
-		// TODO:// Take json file and use it to create secret to pass into client
-		/*	m, err := makeMapfromJson(fl)
-			printErrorWithExit(err, cmd, "Error:")
-			stringdata := turnMaptoString(m)
-			bytemap := turnMaptoBytes(m)
-			convertMapValuesToBase64(bytemap)
-			sec, err := createSecret(name, stringdata, bytemap)
-			printError(err, cmd, "Error:")
-			secretclient.Create(sec)
-		*/
-
-		cmd.Println(green("This is a string base64 encoded"), red(file), red(ns), config)
+		m, err := makeMapfromJson(file)
+		printErrorWithExit(err, cmd, "Error: ")
+		byteData := turnMaptoBytes(m)
+		sec := &v1.Secret{
+			ObjectMeta: metav1.ObjectMeta{
+				Name: name,
+			},
+			TypeMeta: metav1.TypeMeta{
+				Kind:       "Secret",
+				APIVersion: "v1",
+			},
+			Data: byteData,
+			Type: "Opaque",
+		}
+		printError(err, cmd, "Error")
+		cmd.Println("Creating secret ", name)
+		secret, err := secretclient.Create(sec)
+		printError(err, cmd, "Error: ")
+		cmd.Printf("Secret %s created: \n", secret.Name)
 	},
 }

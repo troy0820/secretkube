@@ -89,3 +89,7 @@ func saveToFile(str, filename string) {
 	w.WriteString(str)
 	w.Flush()
 }
+
+func turnMapToBoth(m map[string]interface{}) (map[string]string, map[string][]byte) {
+	return turnMaptoString(m), turnMaptoBytes(m)
+}

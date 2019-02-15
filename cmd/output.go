@@ -101,8 +101,6 @@ create.  This output can be saved to a file or printed to the screen`,
 		printError(err, cmd, "Error:")
 		something, err := secretclient.Create(outputSecret)
 		printError(err, cmd, "Secret:")
-		cmd.Println("secret", something)
-
 		secret, err := secretclient.Get(something.GetName(), metav1.GetOptions{})
 		printError(err, cmd, "Error:")
 		saveToFile(createOutputSecret(secret), out)
@@ -110,15 +108,5 @@ create.  This output can be saved to a file or printed to the screen`,
 		color.Set(color.FgGreen)
 		cmd.Println("\nSecret: \n", createOutputSecret(secret))
 		color.Unset()
-		if fl != "" && out != "" && ns != "" && name != "" {
-			color.Set(color.FgGreen)
-			cmd.Printf("Saving %s secret to: %s in %s namespace", convertToBase64(fl), out, ns)
-			color.Unset()
-		} else {
-			color.Set(color.FgRed)
-			cmd.Println("No file location chosen")
-			color.Unset()
-			os.Exit(1)
-		}
 	},
 }
