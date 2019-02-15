@@ -4,8 +4,6 @@ import (
 	"encoding/base64"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
-	"k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 	"k8s.io/client-go/tools/clientcmd"
@@ -52,17 +50,7 @@ var createCmd = &cobra.Command{
 		m, err := makeMapfromJson(file)
 		printErrorWithExit(err, cmd, "Error: ")
 		byteData := turnMaptoBytes(m)
-		sec := &v1.Secret{
-			ObjectMeta: metav1.ObjectMeta{
-				Name: name,
-			},
-			TypeMeta: metav1.TypeMeta{
-				Kind:       "Secret",
-				APIVersion: "v1",
-			},
-			Data: byteData,
-			Type: "Opaque",
-		}
+		sec, err := CreateSecret(name, byteData)
 		printError(err, cmd, "Error")
 		cmd.Println("Creating secret ", name)
 		secret, err := secretclient.Create(sec)
