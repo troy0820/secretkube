@@ -14,7 +14,6 @@ func convertToBase64(str string) string {
 	return base64.StdEncoding.EncodeToString([]byte(str))
 }
 
-//TODO: use createSecret with input from file to create secret
 var red = color.New(color.FgRed).SprintFunc()
 var green = color.New(color.FgGreen).SprintFunc()
 

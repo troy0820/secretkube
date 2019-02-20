@@ -71,14 +71,6 @@ func turnMaptoString(m map[string]interface{}) map[string]string {
 	return newMap
 }
 
-func decodeFromBase64(str string) string {
-	str2, err := base64.StdEncoding.DecodeString(str)
-	if err != nil {
-		os.Exit(1)
-	}
-	return string(str2)
-}
-
 func saveToFile(str, filename string) {
 	f, err := os.Create(filename)
 	if err != nil {
@@ -88,8 +80,4 @@ func saveToFile(str, filename string) {
 	w := bufio.NewWriter(f)
 	w.WriteString(str)
 	w.Flush()
-}
-
-func turnMapToBoth(m map[string]interface{}) (map[string]string, map[string][]byte) {
-	return turnMaptoString(m), turnMaptoBytes(m)
 }

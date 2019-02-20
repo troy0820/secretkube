@@ -8,11 +8,11 @@ test: secret
 	go test ./... -v
 
 secret-local:
-	go build -mod=vendor -ldflags "-X github.com/troy0820/secretkube/version.Version=$(VERSION)" -o secret
+	go build -mod=vendor -ldflags "-X github.com/troy0820/secretkube/version.Version=$(VERSION)" -o secretkube
 
 
 secret:
-	go build -ldflags "-X github.com/troy0820/secretkube/version.Version=$(VERSION)" -o secret
+	go build -ldflags "-X github.com/troy0820/secretkube/version.Version=$(VERSION)" -o secretkube
 
 clean:
 	rm -rf secret* output*
