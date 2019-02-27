@@ -46,7 +46,7 @@ type: Opaque
 metadata:
   name: ` + sec.GetName() + `
   namespace: ` + sec.GetNamespace() + `
-data:    
+data:
 ` + a
 	return secret
 }
@@ -114,9 +114,9 @@ create.  This output can be saved to a file or printed to the screen`,
 		secretclient := clientset.CoreV1().Secrets(ns)
 		outputSecret, err := createSecret(name, stringdata, bytemap)
 		printError(err, cmd, "Error:")
-		something, err := secretclient.Create(outputSecret)
+		returnedSecret, err := secretclient.Create(outputSecret)
 		printError(err, cmd, "Secret:")
-		secret, err := secretclient.Get(something.GetName(), metav1.GetOptions{})
+		secret, err := secretclient.Get(returnedSecret.GetName(), metav1.GetOptions{})
 		printError(err, cmd, "Error:")
 		saveToFile(createOutputSecret(secret), out)
 		cmd.Printf("Secret saved to %s file \n", out)
