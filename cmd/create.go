@@ -2,12 +2,13 @@ package cmd
 
 import (
 	"encoding/base64"
+	"os"
+
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"k8s.io/client-go/kubernetes"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 	"k8s.io/client-go/tools/clientcmd"
-	"os"
 )
 
 func convertToBase64(str string) string {
@@ -45,7 +46,7 @@ var createCmd = &cobra.Command{
 		printErrorWithExit(err, cmd, "Error:")
 		clientset := kubernetes.NewForConfigOrDie(config)
 		secretclient := clientset.CoreV1().Secrets(ns)
-
+		//TODO: Refactor to use new functions with dec.Decode
 		m, err := makeMapfromJson(file)
 		printErrorWithExit(err, cmd, "Error: ")
 		byteData := turnMaptoBytes(m)
