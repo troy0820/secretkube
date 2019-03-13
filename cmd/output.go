@@ -2,13 +2,13 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes/fake"
-	"os"
-	"strings"
 )
 
 func printError(err error, cmd *cobra.Command, msg string) {
@@ -29,15 +29,7 @@ func printErrorWithExit(err error, cmd *cobra.Command, msg string) {
 func createOutputSecret(sec *v1.Secret) string {
 	var a string
 	for k, v := range sec.StringData {
-		if strings.ContainsAny(v, ",") && strings.ContainsAny(v, "\"") {
-			a += fmt.Sprintf("  %s: %s\n", string(k[1:len(k)-1]), convertToBase64(string(v[1:len(v)-2])))
-
-		} else if strings.ContainsAny(v, "\"") {
-			a += fmt.Sprintf("  %s: %s\n", string(k[1:len(k)-1]), convertToBase64(string(v[1:len(v)-1])))
-
-		} else if strings.ContainsAny(v, ",") {
-			a += fmt.Sprintf("  %s: %s\n", string(k[1:len(k)-1]), convertToBase64(string(v[0:len(v)-1])))
-		}
+		a += fmt.Sprintf("  %s: %s\n", string(k), convertToBase64(string(v)))
 	}
 	secret := `
 apiVersion: v1
@@ -93,9 +85,8 @@ create.  This output can be saved to a file or printed to the screen`,
 		name, err := cmd.Flags().GetString("name")
 		printError(err, cmd, "Error:")
 
-		m, err := makeMapfromJson(fl)
+		m, err := MakeMapFromJSON(fl)
 		printErrorWithExit(err, cmd, "Error:")
-
 		out, err := cmd.Flags().GetString("output")
 		printError(err, cmd, "Error:")
 
@@ -108,11 +99,10 @@ create.  This output can be saved to a file or printed to the screen`,
 		}
 		//TODO: Write test to check return value from secret matches output secret function
 		clientset := fake.NewSimpleClientset()
-		stringdata := turnMaptoString(m)
-		bytemap := turnMaptoBytes(m)
+		bytemap := TurnMapToBytes(m)
 		convertMapValuesToBase64(bytemap)
 		secretclient := clientset.CoreV1().Secrets(ns)
-		outputSecret, err := createSecret(name, stringdata, bytemap)
+		outputSecret, err := createSecret(name, m, bytemap)
 		printError(err, cmd, "Error:")
 		returnedSecret, err := secretclient.Create(outputSecret)
 		printError(err, cmd, "Secret:")

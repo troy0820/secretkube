@@ -3,7 +3,9 @@ package cmd
 import (
 	"bufio"
 	"encoding/base64"
+	"encoding/json"
 	"errors"
+	"fmt"
 	"os"
 	"strings"
 	"unicode"
@@ -26,6 +28,43 @@ func makeMapfromJson(file string) (map[string]interface{}, error) {
 		}
 	}
 	return m, nil
+}
+
+func MakeMapFromJSON(file string) (map[string]string, error) {
+	m := map[string]interface{}{}
+	f, err := os.Open(file)
+	if err != nil {
+		return nil, fmt.Errorf(err.Error())
+	}
+	defer f.Close()
+	scanner := bufio.NewScanner(f)
+	scanner.Split(bufio.ScanLines)
+	var s string
+	for scanner.Scan() {
+		s += scanner.Text()
+	}
+	dec := json.NewDecoder(strings.NewReader(s))
+	if err := dec.Decode(&m); err != nil {
+		return nil, fmt.Errorf(err.Error())
+	}
+
+	mm := map[string]string{}
+	for k, v := range m {
+		switch x := v.(type) {
+		case string:
+			mm[k] = x
+		case float64:
+			if x == float64(int64(x)) {
+				mm[k] = fmt.Sprintf("%.0f", x)
+			} else {
+				mm[k] = fmt.Sprintf("%f", x)
+			}
+		case bool:
+			mm[k] = fmt.Sprintf("%v", x)
+
+		}
+	}
+	return mm, nil
 }
 
 func stripQuotesforSecret(m map[string]string) map[string]string {
@@ -52,6 +91,14 @@ func turnMaptoBytes(m map[string]interface{}) map[string][]byte {
 			newMap[k[1:len(k)-1]] = []byte(a[0 : len(a)-1])
 		}
 
+	}
+	return newMap
+}
+
+func TurnMapToBytes(m map[string]string) map[string][]byte {
+	newMap := map[string][]byte{}
+	for k, v := range m {
+		newMap[k] = []byte(v)
 	}
 	return newMap
 }
