@@ -43,11 +43,10 @@ func MakeMapFromJSON(file string) (map[string]string, error) {
 	for scanner.Scan() {
 		s += scanner.Text()
 	}
-	dec := json.NewDecoder(strings.NewReader(s))
-	if err := dec.Decode(&m); err != nil {
+
+	if err := json.Unmarshal([]byte(s), &m); err != nil {
 		return nil, fmt.Errorf(err.Error())
 	}
-
 	mm := map[string]string{}
 	for k, v := range m {
 		switch x := v.(type) {
