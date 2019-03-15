@@ -46,15 +46,16 @@ var createCmd = &cobra.Command{
 		printErrorWithExit(err, cmd, "Error:")
 		clientset := kubernetes.NewForConfigOrDie(config)
 		secretclient := clientset.CoreV1().Secrets(ns)
-		//TODO: Refactor to use new functions with dec.Decode
-		m, err := makeMapfromJson(file)
+		//Create map from JSON file
+		m, err := MakeMapFromJSON(file)
 		printErrorWithExit(err, cmd, "Error: ")
-		byteData := turnMaptoBytes(m)
+		byteData := TurnMapToBytes(m)
+		//Create secret with byteData
 		sec, err := CreateSecret(name, byteData)
 		printError(err, cmd, "Error")
-		cmd.Println("Creating secret ", name)
+		cmd.Println(green("Creating secret ", name))
 		secret, err := secretclient.Create(sec)
-		printError(err, cmd, "Error: ")
+		printError(err, cmd, red("Error: "))
 		cmd.Printf("Secret %s created: \n", secret.Name)
 	},
 }

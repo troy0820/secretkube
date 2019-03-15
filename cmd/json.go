@@ -30,6 +30,7 @@ func makeMapfromJson(file string) (map[string]interface{}, error) {
 	return m, nil
 }
 
+//Opens a JSON file and creates a map[string]string
 func MakeMapFromJSON(file string) (map[string]string, error) {
 	m := map[string]interface{}{}
 	f, err := os.Open(file)
@@ -94,6 +95,7 @@ func turnMaptoBytes(m map[string]interface{}) map[string][]byte {
 	return newMap
 }
 
+//Takes map[string]string and transforms the value to a slice of bytes
 func TurnMapToBytes(m map[string]string) map[string][]byte {
 	newMap := map[string][]byte{}
 	for k, v := range m {
