@@ -12,7 +12,7 @@ func TestJsonFunction(t *testing.T) {
 	if err != nil {
 		t.Error("Error when executing function")
 	}
-	for k, _ := range m {
+	for k := range m {
 		if key, ok := m[k]; ok {
 			continue
 		} else {
