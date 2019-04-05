@@ -1,7 +1,7 @@
 # Secret Kube
-[![Travis CI](https://img.shields.io/travis/troy0820/secretkube.svg?style=for-the-badge)](https://travis-ci.org/troy0820/secretkube)
-![](https://img.shields.io/github/issues/troy0820/secretkube.svg?style=for-the-badge)
-[![Go Report Card](https://goreportcard.com/badge/github.com/troy0820/secretkube)](https://goreportcard.com/report/github.com/troy0820/secretkube)
+[![Travis CI](https://img.shields.io/travis/troy0820/secretkube.svg?style=flat-square)](https://travis-ci.org/troy0820/secretkube)
+![](https://img.shields.io/github/issues/troy0820/secretkube.svg?style=flat-square)
+[![Go Report Card](https://goreportcard.com/badge/github.com/troy0820/secretkube?style=flat-square)](https://goreportcard.com/report/github.com/troy0820/secretkube)
 
 _Name is a work in progress_
 ## Table of Contents
