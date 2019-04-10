@@ -25,8 +25,11 @@ func TestOutputSecret(t *testing.T) {
 		if want, got := bytemap, secret.Data; reflect.DeepEqual(want, got) != true {
 			t.Errorf("Secret Data is %v and you got %v", want, got)
 		}
+		if want, got := "Secret", secret.Kind; want != got {
+			t.Errorf("Secret Kind is %v and you got %v", want, got)
+		}
 	})
 	t.Run("Output secret equals stdOut", func(T *testing.T) {
-
+		//TODO: Compare output of createoutputsecret to output template
 	})
 }

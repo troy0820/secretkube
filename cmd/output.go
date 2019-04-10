@@ -98,7 +98,6 @@ create.  This output can be saved to a file or printed to the screen`,
 		} else {
 			ns = "default"
 		}
-		//TODO: Write test to check return value from secret matches output secret function
 		clientset := fake.NewSimpleClientset()
 		bytemap := TurnMapToBytes(m)
 		convertMapValuesToBase64(bytemap)
