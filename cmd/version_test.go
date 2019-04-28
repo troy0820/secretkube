@@ -1,14 +1,14 @@
 package cmd
 
 import (
-	"strings"
+	"bytes"
 	"testing"
 )
 
 func TestVersionCommand(t *testing.T) {
-	vers := "1.0.0"
-	version := strings.ContainsAny(Version(vers), "1.0.0")
-	if version == false {
-		t.Errorf("Expected string should have %s", vers)
+	vers := "SecretKube -- version 1.0.0"
+	buffer := bytes.NewBufferString(vers)
+	if want, got := buffer.String(), Version("1.0.0"); want != got {
+		t.Errorf("You wanted %v but got %v", want, got)
 	}
 }
