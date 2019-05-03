@@ -6,7 +6,7 @@ import (
 )
 
 func TestOutputSecret(t *testing.T) {
-	m, err := MakeMapFromJSON("../json.json")
+	m, err := MakeMapFromJSON("../testdata/json.json")
 	if err != nil {
 		t.Error("Error with makeMapfromJson")
 	}
