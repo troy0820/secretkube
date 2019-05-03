@@ -5,9 +5,19 @@ import (
 )
 
 func TestConverToBase64(t *testing.T) {
-	hello := convertToBase64("hello")
-
-	if hello != "aGVsbG8=" {
-		t.Errorf("Exptected should be aGVsbG8= but got %s", hello)
+	tests := map[string]struct {
+		input string
+		want  string
+	}{
+		"hello":   {"hello", "aGVsbG8="},
+		"testing": {"testing", "dGVzdGluZw=="},
+	}
+	for name, test := range tests {
+		got := convertToBase64(test.input)
+		t.Run(name, func(t *testing.T) {
+			if test.want != got {
+				t.Fatalf("exptected %#v, got %#v", test.want, got)
+			}
+		})
 	}
 }

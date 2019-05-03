@@ -7,7 +7,7 @@ import (
 )
 
 func TestJsonFunction(t *testing.T) {
-	m, err := makeMapfromJson("../json.json")
+	m, err := makeMapfromJson("../testdata/json.json")
 
 	if err != nil {
 		t.Error("Error when executing function")
@@ -23,7 +23,7 @@ func TestJsonFunction(t *testing.T) {
 }
 
 func TestMapToString(t *testing.T) {
-	m, err := makeMapfromJson("../json.json")
+	m, err := makeMapfromJson("../testdata/json.json")
 
 	if err != nil {
 		t.Error("Error when executing function")
@@ -39,7 +39,7 @@ func TestMapToString(t *testing.T) {
 }
 
 func TestMapToBytes(t *testing.T) {
-	m, err := makeMapfromJson("../json.json")
+	m, err := makeMapfromJson("../testdata/json.json")
 
 	if err != nil {
 		t.Error("Error when executing function")
@@ -55,7 +55,7 @@ func TestMapToBytes(t *testing.T) {
 }
 
 func TestConvertMapToBase64(t *testing.T) {
-	m, err := makeMapfromJson("../json.json")
+	m, err := makeMapfromJson("../testdata/json.json")
 
 	if err != nil {
 		t.Error("Error when executing function")
@@ -73,7 +73,7 @@ func TestConvertMapToBase64(t *testing.T) {
 }
 
 func TestStripQuotes(t *testing.T) {
-	m, err := makeMapfromJson("../json.json")
+	m, err := makeMapfromJson("../testdata/json.json")
 
 	if err != nil {
 		t.Error("Error executing function")
