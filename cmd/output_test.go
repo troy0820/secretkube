@@ -3,6 +3,8 @@ package cmd
 import (
 	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestOutputSecret(t *testing.T) {
@@ -29,7 +31,12 @@ func TestOutputSecret(t *testing.T) {
 			t.Errorf("Secret Kind is %v and you got %v", want, got)
 		}
 	})
-	t.Run("Output secret equals stdOut", func(T *testing.T) {
-		//TODO: Compare output of createoutputsecret to output template
+	t.Run("Secret Stringdata equals map", func(T *testing.T) {
+		bytemap := TurnMapToBytes(m)
+		secret, err := createSecret("fancy-secret", m, bytemap)
+		if err != nil {
+			t.Fatal(err)
+		}
+		assert.Equal(t, m, secret.StringData, "Results are not equal")
 	})
 }
