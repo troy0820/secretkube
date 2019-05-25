@@ -6,6 +6,8 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
+	v1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp" //Needed for side effects for GCP
 	"k8s.io/client-go/tools/clientcmd"
@@ -13,6 +15,22 @@ import (
 
 func convertToBase64(str string) string {
 	return base64.StdEncoding.EncodeToString([]byte(str))
+}
+
+//CreateSecret creates a secret to put into cluster
+func CreateSecret(name string, data map[string][]byte) (*v1.Secret, error) {
+	return &v1.Secret{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: name,
+		},
+		TypeMeta: metav1.TypeMeta{
+			Kind:       "Secret",
+			APIVersion: "v1",
+		},
+		Data: data,
+		Type: "Opaque",
+	}, nil
+
 }
 
 var red = color.New(color.FgRed).SprintFunc()

@@ -58,22 +58,6 @@ func createSecret(name string, stringdata map[string]string, data map[string][]b
 	}, nil
 }
 
-//CreateSecret creates a secret to be able to print
-func CreateSecret(name string, data map[string][]byte) (*v1.Secret, error) {
-	return &v1.Secret{
-		ObjectMeta: metav1.ObjectMeta{
-			Name: name,
-		},
-		TypeMeta: metav1.TypeMeta{
-			Kind:       "Secret",
-			APIVersion: "v1",
-		},
-		Data: data,
-		Type: "Opaque",
-	}, nil
-
-}
-
 var outputCmd = &cobra.Command{
 	Use:   "output",
 	Short: "Creates output of the secret",
