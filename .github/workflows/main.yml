@@ -1,0 +1,16 @@
+name: Go workflow for CI/CD
+on: push
+jobs:
+  go-job:
+    name:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Go build
+      run: |
+        make build
+    - name: Go test
+      run: |
+        make test
+    - name: secret output
+      run: |
+        make output
