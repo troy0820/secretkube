@@ -1,10 +1,8 @@
 #!/bin/bash
-# Test the Golang application
+# Build the application and test output function
 rm go.sum
 
 go get ./...
-
-go test ./... -v
 
 go build -ldflags "-X github.com/troy0820/secretkube/version.Version=v0.0.1" -o secretkube
 

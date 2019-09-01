@@ -1,9 +1,9 @@
-name: Go test, build, output
+name: Go test
 on: push
 jobs:
-  go-job:
-    name: Go-job
+  go-test:
+    name: Go-test
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - uses: ./action
+    - uses: ./action/test

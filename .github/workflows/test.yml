@@ -1,0 +1,9 @@
+name: Go build and Output
+on: push
+jobs:
+  go-build:
+    name: Go-build-and-output
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: ./action/build
