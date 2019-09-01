@@ -1,4 +1,4 @@
-FROM golang:latest
+FROM golang:alpine
 
 LABEL "com.github.action.name"="Go-workflow"
 LABEL "com.github.actions.description"="Go build, test,output"
