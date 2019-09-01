@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"io"
 	"os"
 
 	"github.com/fatih/color"
@@ -26,11 +27,11 @@ func printErrorWithExit(err error, cmd *cobra.Command, msg string) {
 	}
 }
 
-func writeToStdOut(sec *v1.Secret) {
-	w := os.Stdout
+func writeToStdOut(w io.Writer, sec *v1.Secret) error {
 	color.Set(color.FgGreen)
 	fmt.Fprint(w, createOutputSecret(sec))
 	color.Unset()
+	return nil
 }
 func createOutputSecret(sec *v1.Secret) string {
 	var a string
@@ -108,7 +109,7 @@ create.  This output can be saved to a file or printed to the screen`,
 			cmd.Println("\nSecret: \n", createOutputSecret(secret))
 			color.Unset()
 		} else {
-			writeToStdOut(secret)
+			writeToStdOut(os.Stdout, secret)
 		}
 	},
 }

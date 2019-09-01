@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"bytes"
 	"reflect"
 	"testing"
 
@@ -39,4 +40,20 @@ func TestOutputSecret(t *testing.T) {
 		}
 		assert.Equal(t, m, secret.StringData, "Results are not equal")
 	})
+}
+
+func TestWriteToStdOut(t *testing.T) {
+	b := &bytes.Buffer{}
+	m, err := MakeMapFromJSON("../testdata/json.json")
+	if err != nil {
+		t.Error("Error with makeMapfromJson")
+	}
+	bytemap := TurnMapToBytes(m)
+	secret, err := createSecret("fancy-secret", m, bytemap)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := writeToStdOut(b, secret); err != nil {
+		t.Fatal("Failure to write to stdout: ", err)
+	}
 }
