@@ -26,6 +26,12 @@ func printErrorWithExit(err error, cmd *cobra.Command, msg string) {
 	}
 }
 
+func writeToStdOut(sec *v1.Secret) {
+	w := os.Stdout
+	color.Set(color.FgGreen)
+	fmt.Fprint(w, createOutputSecret(sec))
+	color.Unset()
+}
 func createOutputSecret(sec *v1.Secret) string {
 	var a string
 	for k, v := range sec.StringData {
@@ -72,16 +78,19 @@ create.  This output can be saved to a file or printed to the screen`,
 
 		m, err := MakeMapFromJSON(fl)
 		printErrorWithExit(err, cmd, "Error:")
-		out, err := cmd.Flags().GetString("output")
-		printError(err, cmd, "Error:")
+		var out string
+		if cmd.Flags().Changed("output") {
+			var err error
+			out, err = cmd.Flags().GetString("output")
+			printError(err, cmd, "Error:")
+		}
 
-		var ns string
+		ns := "default"
 		if cmd.Flags().Changed("namespace") {
 			ns, err = cmd.Flags().GetString("namespace")
 			printError(err, cmd, "Error:")
-		} else {
-			ns = "default"
 		}
+
 		clientset := fake.NewSimpleClientset()
 		bytemap := TurnMapToBytes(m)
 		convertMapValuesToBase64(bytemap)
@@ -92,10 +101,14 @@ create.  This output can be saved to a file or printed to the screen`,
 		printError(err, cmd, "Secret:")
 		secret, err := secretclient.Get(returnedSecret.GetName(), metav1.GetOptions{})
 		printError(err, cmd, "Error:")
-		saveToFile(createOutputSecret(secret), out)
-		cmd.Printf("Secret saved to %s file \n", out)
-		color.Set(color.FgGreen)
-		cmd.Println("\nSecret: \n", createOutputSecret(secret))
-		color.Unset()
+		if out != "" {
+			saveToFile(createOutputSecret(secret), out)
+			cmd.Printf("Secret saved to %s file \n", out)
+			color.Set(color.FgGreen)
+			cmd.Println("\nSecret: \n", createOutputSecret(secret))
+			color.Unset()
+		} else {
+			writeToStdOut(secret)
+		}
 	},
 }
