@@ -3,7 +3,6 @@ on:
   push:
     paths:
     - '*'
-    - '!*.md'
 jobs:
   go-test:
     name: Go-test

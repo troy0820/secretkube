@@ -3,7 +3,6 @@ on:
   push:
     paths:
     - '*'
-    - '!*.md'
 jobs:
   go-build:
     name: Go-build-and-output

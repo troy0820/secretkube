@@ -109,7 +109,9 @@ create.  This output can be saved to a file or printed to the screen`,
 			cmd.Println("\nSecret: \n", createOutputSecret(secret))
 			color.Unset()
 		} else {
-			writeToStdOut(os.Stdout, secret)
+			if err := writeToStdOut(os.Stdout, secret); err != nil {
+				printError(err, cmd, "Error:")
+			}
 		}
 	},
 }
