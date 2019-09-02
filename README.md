@@ -1,8 +1,8 @@
 # Secret Kube
 ![](https://img.shields.io/github/issues/troy0820/secretkube.svg?style=flat-square)
 [![Go Report Card](https://goreportcard.com/badge/github.com/troy0820/secretkube?style=flat-square)](https://goreportcard.com/report/github.com/troy0820/secretkube)
-https://github.com/troy0820/secretkube/workflows/Go%20build%20and%20Output/badge.svg
-https://github.com/troy0820/secretkube/workflows/Go%20test/badge.svg
+![](https://github.com/troy0820/secretkube/workflows/Go%20build%20and%20Output/badge.svg)
+![](https://github.com/troy0820/secretkube/workflows/Go%20test/badge.svg)
 
 ## Table of Contents
 _(Table of contents goes here)_
