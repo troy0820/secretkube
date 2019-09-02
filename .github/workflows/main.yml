@@ -1,5 +1,9 @@
 name: Go test
-on: push
+on:
+  push:
+    paths:
+    - '*'
+    - '!*.md'
 jobs:
   go-test:
     name: Go-test
