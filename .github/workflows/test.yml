@@ -3,6 +3,7 @@ on:
   push:
     paths:
     - '*'
+    - '!*.sum'
 jobs:
   go-build:
     name: Go-build-and-output
