@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Test the Golang application
 rm go.sum
 
