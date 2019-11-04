@@ -1,9 +1,6 @@
 name: Go test
 on:
   push:
-    paths:
-    - '*'
-    - '!*.sum'
 jobs:
   go-test:
     name: Go-test
