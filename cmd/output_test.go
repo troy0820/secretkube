@@ -36,7 +36,7 @@ func TestOutputSecret(t *testing.T) {
 		bytemap := TurnMapToBytes(m)
 		secret, err := createSecret("fancy-secret", m, bytemap)
 		if err != nil {
-			t.Fatal(err)
+			t.Fatal("Error creating the secret", err)
 		}
 		assert.Equal(t, m, secret.StringData, "Results are not equal")
 	})
