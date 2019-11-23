@@ -6,7 +6,8 @@ LABEL "com.github.actions.icon"="mic"
 LABEL "com.github.actions.color"="purple"
 
 ENV GO111MODULE=on
-RUN apk add --no-cache git gcc clang
+ENV CGO_ENABLED 0
+RUN apk add --no-cache clang git gcc
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
