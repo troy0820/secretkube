@@ -1,6 +1,5 @@
 #!/bin/sh
 # Test the Golang application
-rm go.sum
-go get ./...
+go mod download
 go test ./... -v
 
