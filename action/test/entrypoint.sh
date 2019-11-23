@@ -1,6 +1,8 @@
 #!/bin/sh
 # Build the application and test output function
 
-go mod download
+rm go.sum
+
+go get ./...
 
 go test ./... -v
