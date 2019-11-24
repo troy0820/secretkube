@@ -18,7 +18,7 @@ The key of your secret will be the file name and everything will be base64 encod
 
 ### How to install
 
-`go get -u github.com/troy0820/secretkube`
+`go get -u github.com/troy0820/secretkube/cmd/secretkube`
 
 ### Dependencies vendored with ~~dep~~ `go 1.11 modules`
 
