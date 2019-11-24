@@ -1,10 +1,11 @@
-package cmd
+package commands
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/spf13/cobra"
 	"github.com/troy0820/secretkube/version"
-	"os"
 )
 
 var rootCmd = &cobra.Command{

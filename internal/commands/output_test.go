@@ -1,4 +1,4 @@
-package cmd
+package commands
 
 import (
 	"bytes"
@@ -9,7 +9,7 @@ import (
 )
 
 func TestOutputSecret(t *testing.T) {
-	m, err := MakeMapFromJSON("../testdata/json.json")
+	m, err := MakeMapFromJSON("../../testdata/json.json")
 	if err != nil {
 		t.Error("Error with makeMapfromJson")
 	}
@@ -44,7 +44,7 @@ func TestOutputSecret(t *testing.T) {
 
 func TestWriteToStdOut(t *testing.T) {
 	b := &bytes.Buffer{}
-	m, err := MakeMapFromJSON("../testdata/json.json")
+	m, err := MakeMapFromJSON("../../testdata/json.json")
 	if err != nil {
 		t.Error("Error with makeMapfromJson")
 	}
