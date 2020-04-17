@@ -42,13 +42,11 @@ func init() {
 	outputCmd.Flags().StringVarP(&name, "name", "n", "", "name of the secret")
 	outputCmd.MarkFlagRequired("name")
 	outputCmd.MarkFlagRequired("file")
-	rootCmd.AddCommand(versionCmd)
-	rootCmd.AddCommand(createCmd)
-	rootCmd.AddCommand(outputCmd)
+	rootCmd.AddCommand(versionCmd, createCmd, outputCmd)
 	rootCmd.Flags().BoolVarP(&vers, "version", "v", false, "version output")
 }
 
-//Execute command to execute root command that is esentially the whole program
+//Execute command to execute secretkube command line
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err.Error())

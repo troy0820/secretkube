@@ -9,6 +9,7 @@ import (
 )
 
 func TestOutputSecret(t *testing.T) {
+	t.Parallel()
 	m, err := MakeMapFromJSON("../../testdata/json.json")
 	if err != nil {
 		t.Error("Error with makeMapfromJson")
@@ -43,6 +44,7 @@ func TestOutputSecret(t *testing.T) {
 }
 
 func TestWriteToStdOut(t *testing.T) {
+	t.Parallel()
 	b := &bytes.Buffer{}
 	m, err := MakeMapFromJSON("../../testdata/json.json")
 	if err != nil {

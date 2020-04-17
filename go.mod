@@ -30,3 +30,5 @@ require (
 	k8s.io/kube-openapi v0.0.0-20191107075043-30be4d16710a // indirect
 	k8s.io/utils v0.0.0-20191114200735-6ca3b61696b6 // indirect
 )
+
+go 1.13
