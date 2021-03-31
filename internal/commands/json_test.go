@@ -7,6 +7,7 @@ import (
 )
 
 func TestJsonFunction(t *testing.T) {
+	t.Parallel()
 	m, err := makeMapfromJson("../../testdata/json.json")
 
 	if err != nil {
@@ -23,6 +24,7 @@ func TestJsonFunction(t *testing.T) {
 }
 
 func TestMapToString(t *testing.T) {
+	t.Parallel()
 	m, err := makeMapfromJson("../../testdata/json.json")
 
 	if err != nil {
