@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"context"
 	"encoding/base64"
 	"os"
 
@@ -72,7 +73,8 @@ var createCmd = &cobra.Command{
 		sec, err := CreateSecret(name, byteData)
 		printError(err, cmd, "Error")
 		cmd.Println(green("Creating secret ", name))
-		secret, err := secretclient.Create(sec)
+		ctx := context.Background()
+		secret, err := secretclient.Create(ctx, sec, metav1.CreateOptions{})
 		printError(err, cmd, red("Error: "))
 		cmd.Printf("Secret %s created: \n", secret.Name)
 	},

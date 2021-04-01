@@ -3,7 +3,7 @@
 
 go mod download
 
-go build -ldflags "-X github.com/troy0820/secretkube/version.Version=v0.0.1" -o secretkube ./cmd/secretkube
+go build -o secretkube ./cmd/secretkube
 
 ./secretkube output -f "testdata/json.json" -o output.yaml -n secret -s secret
 

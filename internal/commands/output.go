@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"os"
@@ -91,15 +92,15 @@ create.  This output can be saved to a file or printed to the screen`,
 			ns, err = cmd.Flags().GetString("namespace")
 			printError(err, cmd, "Error:")
 		}
-
+		ctx := context.Background()
 		clientset := fake.NewSimpleClientset()
 		bytemap := TurnMapToBytes(m)
 		convertMapValuesToBase64(bytemap)
 		outputSecret, err := createSecret(name, m, bytemap)
 		printError(err, cmd, "Error:")
-		returnedSecret, err := clientset.CoreV1().Secrets(ns).Create(outputSecret)
+		returnedSecret, err := clientset.CoreV1().Secrets(ns).Create(ctx, outputSecret, metav1.CreateOptions{})
 		printError(err, cmd, "Secret:")
-		secret, err := clientset.CoreV1().Secrets(ns).Get(returnedSecret.GetName(), metav1.GetOptions{})
+		secret, err := clientset.CoreV1().Secrets(ns).Get(ctx, returnedSecret.GetName(), metav1.GetOptions{})
 		printError(err, cmd, "Error:")
 		if out != "" {
 			saveToFile(createOutputSecret(secret), out)
