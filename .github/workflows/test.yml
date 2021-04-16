@@ -1,6 +1,5 @@
 name: Go build and Output
-on:
-  push:
+on: [push, workflow_dispatch]
 jobs:
   go-build:
     name: Go-build-and-output
