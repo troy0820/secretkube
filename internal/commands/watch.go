@@ -12,11 +12,11 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 )
 
-var watcher = &cobra.Command{
+var watcherCmd = &cobra.Command{
 	Use:     "watch",
-	Short:   "Watches k8s secrets in the default namespace",
-	Long:    `Watches k8s secrets in the default namespace`,
-	Aliases: []string{"Create"},
+	Short:   "Watches k8s secrets in a namespace",
+	Long:    `Watches k8s secrets in a namespace`,
+	Aliases: []string{"watch"},
 	Run: func(cmd *cobra.Command, args []string) {
 
 		var kubeconfig, ns string

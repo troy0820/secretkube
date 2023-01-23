@@ -43,7 +43,8 @@ func init() {
 	outputCmd.MarkFlagRequired("name")
 	outputCmd.MarkFlagRequired("file")
 	get.Flags().StringVarP(&tname, "name", "n", "", "name of the secret")
-	rootCmd.AddCommand(versionCmd, createCmd, outputCmd, get, watcher)
+	watcherCmd.Flags().StringVarP(&namespace, "namespace", "n", "", "namespace of secrets to watch")
+	rootCmd.AddCommand(versionCmd, createCmd, outputCmd, get, watcherCmd)
 	rootCmd.Flags().BoolVarP(&vers, "version", "v", false, "version output")
 }
 
