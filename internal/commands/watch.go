@@ -9,7 +9,9 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/tools/clientcmd"
+	toolswatch "k8s.io/client-go/tools/watch"
 )
 
 var watcherCmd = &cobra.Command{
@@ -36,20 +38,23 @@ var watcherCmd = &cobra.Command{
 		printErrorWithExit(err, cmd, "Error:")
 		clientset := kubernetes.NewForConfigOrDie(config)
 		secretclient := clientset.CoreV1().Secrets(ns)
-		watcher, err := secretclient.Watch(context.Background(), metav1.ListOptions{})
+		watchFunc := func(_ metav1.ListOptions) (watch.Interface, error) {
+			return secretclient.Watch(context.Background(), metav1.ListOptions{})
+		}
+		retryWatcher, err := toolswatch.NewRetryWatcher("1", &cache.ListWatch{WatchFunc: watchFunc})
 		if err != nil {
 			printError(err, cmd, red("Error: "))
 		}
 		ch := make(chan struct{})
-		go callWatcher(watcher, cobra.Command{}, ch)
+		go callWatcher(retryWatcher, cobra.Command{}, ch)
 		<-ch
 	},
 }
 
 func callWatcher(watcher watch.Interface, cmd cobra.Command, done chan struct{}) {
 	for event := range watcher.ResultChan() {
-		if event.Type == watch.Added {
-			cmd.Printf("I watched you add a secret to the %s namespace: %s \n", event.Object.(*v1.Secret).Namespace, event.Object.(*v1.Secret).Name)
+		if event.Type == watch.Added || event.Type == watch.Modified {
+			cmd.Printf("I watched you add/modify a secret to the %s namespace: %s \n", event.Object.(*v1.Secret).Namespace, event.Object.(*v1.Secret).Name)
 		}
 		if event.Type == watch.Deleted {
 			cmd.Printf("I watched you delete the secret to the cluster in the %s namespace.....\n", event.Object.(*v1.Secret).Namespace)
