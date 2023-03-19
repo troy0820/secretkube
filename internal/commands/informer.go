@@ -8,6 +8,7 @@ import (
 
 	"github.com/spf13/cobra"
 	v1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/cache"
@@ -41,6 +42,18 @@ var informerCmd = &cobra.Command{
 			DeleteFunc: func(obj interface{}) {
 				secretObj := obj.(*v1.Secret)
 				cmd.Println("I see that you deleted a secret", secretObj.Name, secretObj.Namespace)
+				cmd.Println("I'm going to create it again", secretObj.Name, secretObj.Namespace)
+				sec := &v1.Secret{
+					ObjectMeta: metav1.ObjectMeta{
+						Name:      secretObj.Name,
+						Namespace: secretObj.Namespace,
+					},
+					Data: secretObj.Data,
+				}
+				_, err := clientset.CoreV1().Secrets(secretObj.Namespace).Create(context.Background(), sec, metav1.CreateOptions{})
+				if err != nil {
+					cmd.Println("can't create secret", err)
+				}
 			},
 		})
 		ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
