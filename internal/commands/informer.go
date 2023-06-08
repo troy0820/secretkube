@@ -47,6 +47,9 @@ var informerCmd = &cobra.Command{
 					ObjectMeta: metav1.ObjectMeta{
 						Name:      secretObj.Name,
 						Namespace: secretObj.Namespace,
+						Labels: map[string]string{
+							"newly-created": time.Stamp,
+						},
 					},
 					Data: secretObj.Data,
 				}
