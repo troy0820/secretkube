@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 	"os/signal"
+	"strconv"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -43,12 +44,13 @@ var informerCmd = &cobra.Command{
 				secretObj := obj.(*v1.Secret)
 				cmd.Println("I see that you deleted a secret", secretObj.Name, secretObj.Namespace)
 				cmd.Println("I'm going to create it again", secretObj.Name, secretObj.Namespace)
+				timeString := strconv.Itoa(int(time.Now().UnixNano()))
 				sec := &v1.Secret{
 					ObjectMeta: metav1.ObjectMeta{
 						Name:      secretObj.Name,
 						Namespace: secretObj.Namespace,
 						Labels: map[string]string{
-							"newly-created": time.Stamp,
+							"newly-created": timeString,
 						},
 					},
 					Data: secretObj.Data,
