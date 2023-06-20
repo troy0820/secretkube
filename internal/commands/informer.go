@@ -55,8 +55,7 @@ var informerCmd = &cobra.Command{
 					},
 					Data: secretObj.Data,
 				}
-				_, err := clientset.CoreV1().Secrets(secretObj.Namespace).Create(context.Background(), sec, metav1.CreateOptions{})
-				if err != nil {
+				if _, err := clientset.CoreV1().Secrets(secretObj.Namespace).Create(context.Background(), sec, metav1.CreateOptions{}); err != nil {
 					cmd.Println("can't create secret", err)
 				}
 			},
