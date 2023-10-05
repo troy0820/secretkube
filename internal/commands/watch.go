@@ -53,11 +53,12 @@ var watcherCmd = &cobra.Command{
 
 func callWatcher(watcher watch.Interface, cmd cobra.Command, done chan struct{}) {
 	for event := range watcher.ResultChan() {
+		sec := event.Object.(*v1.Secret)
 		if event.Type == watch.Added || event.Type == watch.Modified {
-			cmd.Printf("I watched you add/modify a secret to the %s namespace: %s \n", event.Object.(*v1.Secret).Namespace, event.Object.(*v1.Secret).Name)
+			cmd.Printf("I watched you add/modify a secret to the %s namespace: %s \n", sec.Namespace, sec.Name)
 		}
 		if event.Type == watch.Deleted {
-			cmd.Printf("I watched you delete the secret to the cluster in the %s namespace.....\n", event.Object.(*v1.Secret).Namespace)
+			cmd.Printf("I watched you delete the secret to the cluster in the %s namespace.....\n", sec.Namespace)
 		}
 	}
 	done <- struct{}{}
