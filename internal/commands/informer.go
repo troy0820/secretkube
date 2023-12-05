@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"context"
 	"os"
 	"os/signal"
 	"strconv"
@@ -22,6 +21,7 @@ var informerCmd = &cobra.Command{
 	Long:    `Informs about secrets `,
 	Aliases: []string{"inform"},
 	Run: func(cmd *cobra.Command, args []string) {
+		ctx := cmd.Context()
 
 		var kubeconfig string
 		kubeconfig = os.Getenv("HOME") + "/.kube/config"
@@ -55,12 +55,13 @@ var informerCmd = &cobra.Command{
 					},
 					Data: secretObj.Data,
 				}
-				if _, err := clientset.CoreV1().Secrets(secretObj.Namespace).Create(context.Background(), sec, metav1.CreateOptions{}); err != nil {
+				_, err := clientset.CoreV1().Secrets(secretObj.Namespace).Create(ctx, sec, metav1.CreateOptions{})
+				if err != nil {
 					cmd.Println("can't create secret", err)
 				}
 			},
 		})
-		ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
+		ctx, cancel := signal.NotifyContext(ctx, os.Interrupt)
 		defer cancel()
 		secretInformer.Run(ctx.Done())
 	},
