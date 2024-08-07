@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/cobra"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	v1ac "k8s.io/client-go/applyconfigurations/core/v1"
 	"k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/cache"
@@ -45,19 +46,13 @@ var informerCmd = &cobra.Command{
 				cmd.Println("I see that you deleted a secret", secretObj.Name, secretObj.Namespace)
 				cmd.Println("I'm going to create it again", secretObj.Name, secretObj.Namespace)
 				timeString := strconv.Itoa(int(time.Now().UnixNano()))
-				sec := &v1.Secret{
-					ObjectMeta: metav1.ObjectMeta{
-						Name:      secretObj.Name,
-						Namespace: secretObj.Namespace,
-						Labels: map[string]string{
-							"newly-created": timeString,
-						},
-					},
-					Data: secretObj.Data,
-				}
-				_, err := clientset.CoreV1().Secrets(secretObj.Namespace).Create(ctx, sec, metav1.CreateOptions{})
+				secApply := v1ac.Secret(secretObj.Name, secretObj.Namespace)
+				secApply.WithLabels(map[string]string{"newly-created": timeString}).
+					WithStringData(secretObj.StringData).
+					WithData(secretObj.Data)
+				_, err := clientset.CoreV1().Secrets(secretObj.Namespace).Apply(ctx, secApply, metav1.ApplyOptions{FieldManager: "secretKube"})
 				if err != nil {
-					cmd.Println("can't create secret", err)
+					cmd.PrintErrf("server side apply failed %v", err)
 				}
 			},
 		})

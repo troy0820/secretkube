@@ -18,7 +18,7 @@ func convertToBase64(str string) string {
 	return base64.StdEncoding.EncodeToString([]byte(str))
 }
 
-//CreateSecret creates a secret to put into cluster
+// CreateSecret creates a secret to put into cluster
 func CreateSecret(name string, data map[string][]byte) (*v1.Secret, error) {
 	return &v1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
@@ -74,6 +74,7 @@ var createCmd = &cobra.Command{
 		printError(err, cmd, "Error")
 		cmd.Println(green("Creating secret ", name))
 		ctx := context.Background()
+		// TODO: Should I change this to apply?
 		secret, err := secretclient.Create(ctx, sec, metav1.CreateOptions{})
 		printError(err, cmd, red("Error: "))
 		cmd.Printf("Secret %s created: \n", secret.Name)
