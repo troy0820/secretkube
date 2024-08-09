@@ -46,11 +46,10 @@ var informerCmd = &cobra.Command{
 				cmd.Println("I see that you deleted a secret", secretObj.Name, secretObj.Namespace)
 				cmd.Println("I'm going to create it again", secretObj.Name, secretObj.Namespace)
 				timeString := strconv.Itoa(int(time.Now().UnixNano()))
-				secApply := v1ac.Secret(secretObj.Name, secretObj.Namespace)
-				secApply.WithLabels(map[string]string{"newly-created": timeString}).
-					WithStringData(secretObj.StringData).
-					WithData(secretObj.Data)
-				_, err := clientset.CoreV1().Secrets(secretObj.Namespace).Apply(ctx, secApply, metav1.ApplyOptions{FieldManager: "secretKube"})
+				secApply, err := v1ac.ExtractSecret(secretObj, "secretKube")
+				printError(err, cmd, "Error:")
+				secApply.WithLabels(map[string]string{"newly-created": timeString})
+				_, err = clientset.CoreV1().Secrets(secretObj.Namespace).Apply(ctx, secApply, metav1.ApplyOptions{FieldManager: "secretKube"})
 				if err != nil {
 					cmd.PrintErrf("server side apply failed %v", err)
 				}

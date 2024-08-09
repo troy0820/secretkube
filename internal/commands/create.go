@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"context"
 	"encoding/base64"
 	"os"
 
@@ -9,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	v1ac "k8s.io/client-go/applyconfigurations/core/v1"
 	"k8s.io/client-go/kubernetes"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp" //Needed for side effects for GCP
 	"k8s.io/client-go/tools/clientcmd"
@@ -70,12 +70,11 @@ var createCmd = &cobra.Command{
 		printErrorWithExit(err, cmd, "Error: ")
 		byteData := TurnMapToBytes(m)
 		//Create secret with byteData
-		sec, err := CreateSecret(name, byteData)
-		printError(err, cmd, "Error")
 		cmd.Println(green("Creating secret ", name))
-		ctx := context.Background()
+		ctx := cmd.Context()
 		// TODO: Should I change this to apply?
-		secret, err := secretclient.Create(ctx, sec, metav1.CreateOptions{})
+		secApply := v1ac.Secret(name, ns).WithData(byteData)
+		secret, err := secretclient.Apply(ctx, secApply, metav1.ApplyOptions{FieldManager: "secretKube"})
 		printError(err, cmd, red("Error: "))
 		cmd.Printf("Secret %s created: \n", secret.Name)
 	},
