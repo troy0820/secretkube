@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"context"
 	"fmt"
 	"io"
 	"os"
@@ -92,7 +91,7 @@ create.  This output can be saved to a file or printed to the screen`,
 			ns, err = cmd.Flags().GetString("namespace")
 			printError(err, cmd, "Error:")
 		}
-		ctx := context.Background()
+		ctx := cmd.Context()
 		clientset := fake.NewSimpleClientset()
 		bytemap := TurnMapToBytes(m)
 		convertMapValuesToBase64(bytemap)

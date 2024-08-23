@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"context"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -20,7 +19,7 @@ var watcherCmd = &cobra.Command{
 	Long:    `Watches k8s secrets in a namespace`,
 	Aliases: []string{"watch"},
 	Run: func(cmd *cobra.Command, args []string) {
-
+		ctx := cmd.Context()
 		var kubeconfig, ns string
 		kubeconfig = os.Getenv("HOME") + "/.kube/config"
 		if cmd.Flags().Changed("config") {
@@ -39,7 +38,7 @@ var watcherCmd = &cobra.Command{
 		clientset := kubernetes.NewForConfigOrDie(config)
 		secretclient := clientset.CoreV1().Secrets(ns)
 		watchFunc := func(_ metav1.ListOptions) (watch.Interface, error) {
-			return secretclient.Watch(context.Background(), metav1.ListOptions{})
+			return secretclient.Watch(ctx, metav1.ListOptions{})
 		}
 		retryWatcher, err := toolswatch.NewRetryWatcher("1", &cache.ListWatch{WatchFunc: watchFunc})
 		if err != nil {

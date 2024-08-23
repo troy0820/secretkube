@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"context"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -16,6 +15,7 @@ var get = &cobra.Command{
 	Long:    `Gets a kubernetes secret for your cluster`,
 	Aliases: []string{"Create"},
 	Run: func(cmd *cobra.Command, args []string) {
+		ctx := cmd.Context()
 
 		var kubeconfig, ns string
 		name, err := cmd.Flags().GetString("name")
@@ -37,7 +37,7 @@ var get = &cobra.Command{
 		clientset := kubernetes.NewForConfigOrDie(config)
 		secretclient := clientset.CoreV1().Secrets(ns)
 		//Create secret with byteData
-		sec, err := secretclient.Get(context.Background(), name, metav1.GetOptions{})
+		sec, err := secretclient.Get(ctx, name, metav1.GetOptions{})
 		printError(err, cmd, red("Error: "))
 		cmd.Printf("Secret %s created: \n", sec.Data["address"])
 		cmd.Printf("Secret %s string data : \n", sec.StringData)
