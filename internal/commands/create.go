@@ -74,7 +74,7 @@ var createCmd = &cobra.Command{
 		ctx := cmd.Context()
 		// TODO: Should I change this to apply?
 		secApply := v1ac.Secret(name, ns).WithData(byteData)
-		secret, err := secretclient.Apply(ctx, secApply, metav1.ApplyOptions{FieldManager: "secretKube"})
+		secret, err := secretclient.Apply(ctx, secApply, metav1.ApplyOptions{FieldManager: FieldManagerSecretKube})
 		printError(err, cmd, red("Error: "))
 		cmd.Printf("Secret %s created: \n", secret.Name)
 	},
