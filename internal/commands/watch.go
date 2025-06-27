@@ -1,13 +1,18 @@
 package commands
 
 import (
+	"context"
 	"os"
+	"strconv"
+	"time"
 
 	"github.com/spf13/cobra"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/watch"
+	v1ac "k8s.io/client-go/applyconfigurations/core/v1"
 	"k8s.io/client-go/kubernetes"
+	typedv1 "k8s.io/client-go/kubernetes/typed/core/v1"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/tools/clientcmd"
 	toolswatch "k8s.io/client-go/tools/watch"
@@ -45,12 +50,12 @@ var watcherCmd = &cobra.Command{
 			printError(err, cmd, red("Error: "))
 		}
 		ch := make(chan struct{})
-		go callWatcher(retryWatcher, cobra.Command{}, ch)
+		go callWatcher(ctx, retryWatcher, secretclient, cmd, ch)
 		<-ch
 	},
 }
 
-func callWatcher(watcher watch.Interface, cmd cobra.Command, done chan struct{}) {
+func callWatcher(ctx context.Context, watcher watch.Interface, clientset typedv1.SecretInterface, cmd *cobra.Command, done chan struct{}) {
 	for event := range watcher.ResultChan() {
 		sec := event.Object.(*v1.Secret)
 		if event.Type == watch.Added || event.Type == watch.Modified {
@@ -58,6 +63,16 @@ func callWatcher(watcher watch.Interface, cmd cobra.Command, done chan struct{})
 		}
 		if event.Type == watch.Deleted {
 			cmd.Printf("I watched you delete the secret to the cluster in the %s namespace.....\n", sec.Namespace)
+			cmd.Println("I'm going to create it again", sec.Name, sec.Namespace)
+
+			timeString := strconv.Itoa(int(time.Now().UnixNano()))
+			secApply, err := v1ac.ExtractSecret(sec, FieldManagerSecretKube)
+			printError(err, cmd, "Error:")
+			secApply.WithLabels(map[string]string{"newly-created": timeString})
+			_, err = clientset.Apply(ctx, secApply, metav1.ApplyOptions{FieldManager: FieldManagerSecretKube})
+			if err != nil {
+				cmd.PrintErrf("server side apply failed %v", err)
+			}
 		}
 	}
 	done <- struct{}{}
