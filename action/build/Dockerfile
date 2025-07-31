@@ -1,4 +1,4 @@
-FROM golang:1.23-alpine
+FROM golang:1.24-alpine
 
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
