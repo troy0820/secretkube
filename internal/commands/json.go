@@ -11,8 +11,8 @@ import (
 	"unicode"
 )
 
-func makeMapfromJson(file string) (map[string]interface{}, error) {
-	m := map[string]interface{}{}
+func makeMapfromJson(file string) (map[string]any, error) {
+	m := map[string]any{}
 	f, err := os.Open(file)
 	if err != nil {
 		return m, errors.New(err.Error())
@@ -30,12 +30,12 @@ func makeMapfromJson(file string) (map[string]interface{}, error) {
 	return m, nil
 }
 
-//MakeMapFromJSON opens a JSON file and creates a map[string]string
+// MakeMapFromJSON opens a JSON file and creates a map[string]string
 func MakeMapFromJSON(file string) (map[string]string, error) {
-	m := map[string]interface{}{}
+	m := map[string]any{}
 	f, err := os.Open(file)
 	if err != nil {
-		return nil, fmt.Errorf(err.Error())
+		return nil, fmt.Errorf("%s", err.Error())
 	}
 	defer f.Close()
 	scanner := bufio.NewScanner(f)
@@ -46,7 +46,7 @@ func MakeMapFromJSON(file string) (map[string]string, error) {
 	}
 
 	if err := json.Unmarshal([]byte(s), &m); err != nil {
-		return nil, fmt.Errorf(err.Error())
+		return nil, fmt.Errorf("%s", err.Error())
 	}
 	mm := map[string]string{}
 	for k, v := range m {
@@ -79,7 +79,7 @@ func stripQuotesforSecret(m map[string]string) map[string]string {
 	return newMap
 }
 
-func turnMaptoBytes(m map[string]interface{}) map[string][]byte {
+func turnMaptoBytes(m map[string]any) map[string][]byte {
 	newMap := map[string][]byte{}
 	for k, v := range m {
 		a := v.(string)
@@ -95,7 +95,7 @@ func turnMaptoBytes(m map[string]interface{}) map[string][]byte {
 	return newMap
 }
 
-//TurnMapToBytes takes map[string]string and transforms the value to a slice of bytes
+// TurnMapToBytes takes map[string]string and transforms the value to a slice of bytes
 func TurnMapToBytes(m map[string]string) map[string][]byte {
 	newMap := map[string][]byte{}
 	for k, v := range m {
@@ -111,7 +111,7 @@ func convertMapValuesToBase64(m map[string][]byte) {
 
 }
 
-func turnMaptoString(m map[string]interface{}) map[string]string {
+func turnMaptoString(m map[string]any) map[string]string {
 	newMap := map[string]string{}
 	for k, v := range m {
 		newMap[k] = v.(string)
