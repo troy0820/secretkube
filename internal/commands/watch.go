@@ -45,7 +45,7 @@ var watcherCmd = &cobra.Command{
 		watchFunc := func(_ metav1.ListOptions) (watch.Interface, error) {
 			return secretclient.Watch(ctx, metav1.ListOptions{})
 		}
-		retryWatcher, err := toolswatch.NewRetryWatcher("1", &cache.ListWatch{WatchFunc: watchFunc})
+		retryWatcher, err := toolswatch.NewRetryWatcherWithContext(ctx, "1", &cache.ListWatch{WatchFunc: watchFunc})
 		if err != nil {
 			printError(err, cmd, red("Error: "))
 		}

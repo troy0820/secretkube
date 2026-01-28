@@ -37,11 +37,11 @@ var informerCmd = &cobra.Command{
 		informerFactory := informers.NewSharedInformerFactory(clientset, time.Hour*24)
 		secretInformer := informerFactory.Core().V1().Secrets().Informer()
 		secretInformer.AddEventHandler(cache.ResourceEventHandlerFuncs{
-			AddFunc: func(obj interface{}) {
+			AddFunc: func(obj any) {
 				secretObj := obj.(*v1.Secret)
 				cmd.Println("I see that you added a secret", secretObj.Name, secretObj.Namespace)
 			},
-			DeleteFunc: func(obj interface{}) {
+			DeleteFunc: func(obj any) {
 				secretObj := obj.(*v1.Secret)
 				cmd.Println("I see that you deleted a secret", secretObj.Name, secretObj.Namespace)
 				cmd.Println("I'm going to create it again", secretObj.Name, secretObj.Namespace)
